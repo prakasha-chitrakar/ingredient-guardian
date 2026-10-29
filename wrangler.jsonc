@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ingredient-guardian",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    // Serve the React app; anything that isn't a file falls back to index.html.
+    // Requests to /api/* always go to the Worker first.
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  // Free Cloudflare Workers AI, used for the ingredient analysis by default.
+  "ai": { "binding": "AI" },
+  "observability": { "enabled": true }
+}

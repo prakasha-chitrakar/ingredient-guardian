@@ -1,0 +1,125 @@
+[
+  {
+    "id": "cola-sugar",
+    "category": "Label Secrets",
+    "headline": "One can of Coke holds about 35 g of sugar.",
+    "explanation": "Coca-Cola lists 10.6 g of sugar per 100 ml. A 330 ml can adds up to about 35 g, more than the 25 g a day WHO suggests as an extra-healthy target for free sugars.",
+    "howTo": [
+      "Find “sugars” per 100 ml on the label.",
+      "Multiply by the bottle size, then divide by 100.",
+      "Compare with WHO’s 25 g a day target."
+    ],
+    "product": "Coca-Cola Original Taste",
+    "visual": "can",
+    "tags": ["sugar"],
+    "matchTerms": ["coca", "coke", "cola", "soft drink", "soda"],
+    "note": "Figures are Coca-Cola’s published values for Original Taste. Check your own bottle’s label; recipes and sizes can vary by country.",
+    "sources": [
+      { "title": "How much sugar is in Coca-Cola Original Taste?", "publisher": "Coca-Cola", "url": "https://www.coca-cola.com/ng/en/about-us/faq/how-much-sugar-is-in-cocacola-original-taste" },
+      { "title": "WHO calls on countries to reduce sugars intake among adults and children", "publisher": "World Health Organization, 2015", "url": "https://www.who.int/news/item/04-03-2015-who-calls-on-countries-to-reduce-sugars-intake-among-adults-and-children" }
+    ],
+    "verified": "2026-10-29"
+  },
+  {
+    "id": "noodle-sodium",
+    "category": "Nutrition",
+    "headline": "Your noodle packet hides a salt number.",
+    "explanation": "Labels usually list sodium, not salt. Multiply sodium by 2.5 to get salt. WHO advises adults to keep under 2,000 mg of sodium a day, which is under 5 g of salt.",
+    "howTo": [
+      "Find “sodium” on your Wai Wai or noodle packet.",
+      "Check if it’s per serving or per pack.",
+      "Sodium (mg) × 2.5 = salt (mg). Compare with 5,000 mg a day."
+    ],
+    "product": "Instant noodles, like Wai Wai",
+    "visual": "noodles",
+    "tags": ["sodium"],
+    "matchTerms": ["noodle", "wai wai", "ramen", "instant", "masala"],
+    "note": "We don’t show a sodium figure for Wai Wai because we couldn’t verify one from an official label. Use the number printed on your packet.",
+    "sources": [
+      { "title": "Sodium reduction fact sheet", "publisher": "World Health Organization", "url": "https://www.who.int/news-room/fact-sheets/detail/salt-reduction" }
+    ],
+    "verified": "2026-10-29"
+  },
+  {
+    "id": "chips-serving",
+    "category": "Label Secrets",
+    "headline": "One packet isn’t always one serving.",
+    "explanation": "The numbers on the back are often for a single serving, and a packet can hold more than one. Eat two servings and everything on the label doubles.",
+    "howTo": [
+      "Look for “servings per pack” near the top.",
+      "Multiply any number by the servings you’ll eat.",
+      "A serving size is not a recommendation."
+    ],
+    "product": "Chips, like Lays",
+    "visual": "chips",
+    "tags": ["portion"],
+    "matchTerms": ["chips", "lays", "crisps", "kurkure", "snack"],
+    "note": "",
+    "sources": [
+      { "title": "How to Understand and Use the Nutrition Facts Label", "publisher": "U.S. Food & Drug Administration", "url": "https://www.fda.gov/food/nutrition-facts-label/how-understand-and-use-nutrition-facts-label" }
+    ],
+    "verified": "2026-10-29"
+  },
+  {
+    "id": "apple-juice-fibre",
+    "category": "Myth vs Fact",
+    "headline": "Apple juice keeps the sugar but loses the fibre.",
+    "explanation": "A raw apple with skin has 2.4 g of fibre per 100 g. Unsweetened apple juice has 0.2 g. WHO also counts the sugar in juice as free sugar, but not the sugar in whole fruit.",
+    "howTo": [
+      "Prefer the whole fruit when you can.",
+      "On juice labels, check total sugars per glass."
+    ],
+    "product": "Apples and apple juice",
+    "visual": "apple",
+    "tags": ["sugar", "fibre"],
+    "matchTerms": ["apple", "juice"],
+    "note": "",
+    "sources": [
+      { "title": "Apples, raw, with skin (FDC 171688)", "publisher": "USDA FoodData Central", "url": "https://fdc.nal.usda.gov/food-details/171688/nutrients" },
+      { "title": "Apple juice, canned or bottled, unsweetened (FDC 167771)", "publisher": "USDA FoodData Central", "url": "https://fdc.nal.usda.gov/food-details/167771/nutrients" },
+      { "title": "WHO calls on countries to reduce sugars intake among adults and children", "publisher": "World Health Organization, 2015", "url": "https://www.who.int/news/item/04-03-2015-who-calls-on-countries-to-reduce-sugars-intake-among-adults-and-children" }
+    ],
+    "verified": "2026-10-29"
+  },
+  {
+    "id": "bread-whole-grain",
+    "category": "Ingredient Science",
+    "headline": "“Wheat flour” on bread can mean white flour.",
+    "explanation": "Refining removes the bran and germ, and with them virtually all the fibre. For whole grain, the first ingredient should start with “whole”, as in “whole wheat flour”.",
+    "howTo": [
+      "Read the first ingredient on the bread bag.",
+      "Look for the word “whole” before the grain.",
+      "“Multigrain” alone doesn’t mean whole grain."
+    ],
+    "product": "Packaged bread",
+    "visual": "bread",
+    "tags": ["fibre"],
+    "matchTerms": ["bread", "bun", "toast", "wheat flour", "maida"],
+    "note": "",
+    "sources": [
+      { "title": "Whole Grains", "publisher": "Harvard T.H. Chan School of Public Health, The Nutrition Source", "url": "https://nutritionsource.hsph.harvard.edu/what-should-you-eat/whole-grains/" },
+      { "title": "Are whole grains that important?", "publisher": "Harvard Health Publishing", "url": "https://www.health.harvard.edu/diet-and-nutrition/are-whole-grains-that-important" }
+    ],
+    "verified": "2026-10-29"
+  },
+  {
+    "id": "fruit-drink-sugar",
+    "category": "Label Secrets",
+    "headline": "“Made with fruit” can still mean free sugar.",
+    "explanation": "WHO counts sugar from fruit juice and juice concentrate as free sugar, the same group as added table sugar. So a drink sweetened with “apple concentrate” isn’t sugar-free.",
+    "howTo": [
+      "Scan the ingredients for sugar, syrup or “concentrate”.",
+      "Check total sugars per serving.",
+      "Water or plain milk have no free sugars."
+    ],
+    "product": "Fruit drinks and nectars",
+    "visual": "carton",
+    "tags": ["sugar"],
+    "matchTerms": ["frooti", "real", "maaza", "fruit drink", "nectar", "concentrate", "juice"],
+    "note": "",
+    "sources": [
+      { "title": "WHO calls on countries to reduce sugars intake among adults and children", "publisher": "World Health Organization, 2015", "url": "https://www.who.int/news/item/04-03-2015-who-calls-on-countries-to-reduce-sugars-intake-among-adults-and-children" }
+    ],
+    "verified": "2026-10-29"
+  }
+]

@@ -8,7 +8,9 @@ const STEPS = ['Reading…', 'Checking…', 'Almost done…'];
 // Phones and tablets use their own camera app (a capture file input): it works in every
 // mobile browser, including iOS Brave/Chrome/Firefox, which can't stream the camera to
 // websites. The in-page live camera is only used on laptops and desktops.
-const USE_NATIVE_CAMERA = navigator.maxTouchPoints > 0 && window.matchMedia('(pointer: coarse)').matches;
+const USE_NATIVE_CAMERA = window.matchMedia('(pointer: coarse)').matches
+  || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
+  || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); // iPadOS reports as a Mac
 
 export default function Scan({ profile, onResult, initialMode = 'photo' }) {
   const [mode, setMode] = useState(initialMode);

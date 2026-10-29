@@ -469,6 +469,14 @@ textarea.input { resize: vertical; }
 .camera__shutter:disabled { opacity: 0.4; }
 .camera__blocked { max-width: 340px; padding: 24px; color: #fff; text-align: center; display: flex; flex-direction: column; gap: 12px; align-items: center; }
 
+.barcode-entry { display: flex; gap: 8px; width: 100%; max-width: 340px; margin-top: 14px; }
+.barcode-entry .input { flex: 1; min-width: 0; letter-spacing: 0.06em; font-variant-numeric: tabular-nums; }
+.barcode-entry .btn { min-height: 52px; padding: 10px 18px; background: var(--paper-white); }
+.barcode-busy { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-weight: 700; font-size: var(--text-caption); color: var(--accent); }
+.notice { background: var(--highlight-soft); border-radius: var(--radius); padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; font-size: var(--text-body-sm); line-height: 1.5; }
+
+.source-note { font-size: var(--text-tiny); color: var(--muted); text-align: center; margin-top: -12px; }
+
 .group__hint { font-size: var(--text-caption); color: var(--muted); margin: -6px 0 12px; line-height: 1.4; }
 .input--white { background-color: var(--paper-white); border-color: var(--paper-white); }
 .btn--danger { background: var(--paper-white); color: var(--danger); }

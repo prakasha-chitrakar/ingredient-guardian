@@ -119,6 +119,9 @@ export default function Results({ result, onScanAgain, onBack }) {
       {result.preview && <img className="result-photo" src={result.preview} alt="Checked label" />}
 
       <FactsPanel result={result} />
+      {result.source && (
+        <p className="source-note">Ingredients from {result.source} · barcode {result.barcode}</p>
+      )}
 
       {alerts.length > 0 && (
         <ul className="alerts">

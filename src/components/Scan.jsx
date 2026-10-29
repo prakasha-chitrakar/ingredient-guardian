@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Camera, ImageUp, Keyboard, LoaderCircle, TriangleAlert, X } from 'lucide-react';
+import { ScanBarcode, Camera, ImageUp, Keyboard, LoaderCircle, TriangleAlert, X } from 'lucide-react';
 import CameraView from './Camera';
 import Illustration from './Illustrations';
 import discoveries from '../content/discoveries.json';
 import { PRODUCT_TYPES, prepareImage } from '../lib';
+import { isBarcode, readBarcode } from '../barcode';
 
 const STEPS = ['Reading the small print…', 'Interrogating the preservatives…', 'Asking the sugar to explain itself…', 'Checking it against you…', 'Writing the verdict…'];
 
@@ -27,7 +28,11 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(0);
   const [error, setError] = useState('');
+  const [barcode, setBarcode] = useState('');
+  const [barcodeBusy, setBarcodeBusy] = useState('');
+  const [notice, setNotice] = useState(null);
   const fileRef = useRef(null);
+  const barcodeRef = useRef(null);
 
   useEffect(() => {
     if (!loading) return;
@@ -47,15 +52,64 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
     }
   };
 
+  // Barcode: read the number from a photo (or typed), look it up, then check its ingredients.
+  const lookup = async (code) => {
+    if (!isBarcode(code)) { setError('A barcode is 8 to 14 digits, found under the stripes.'); return; }
+    setError('');
+    setNotice(null);
+    setBarcodeBusy('Looking it up…');
+    try {
+      const res = await fetch(`/api/barcode?code=${code}`);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Lookup failed. Try again.');
+      setBarcodeBusy('');
+      if (data.found && data.ingredients) {
+        setProductName(data.productName || '');
+        setProductType(data.productType);
+        analyze(data);
+      } else {
+        if (data.productName) setProductName(data.productName);
+        if (data.productType) setProductType(data.productType);
+        setNotice(data.found
+          ? `Found ${data.productName || 'it'}, but nobody has added its ingredients yet.`
+          : 'Not in the database yet. Even the barcode is keeping secrets.');
+      }
+    } catch (e) {
+      setBarcodeBusy('');
+      setError(e.message === 'Failed to fetch' ? 'No connection. Try again.' : e.message);
+    }
+  };
+
+  const pickBarcodePhoto = async (file) => {
+    if (!file) return;
+    setError('');
+    setNotice(null);
+    setBarcodeBusy('Reading the barcode…');
+    try {
+      const code = await readBarcode(file);
+      if (!code) {
+        setBarcodeBusy('');
+        setError('Couldn’t read a barcode. Get closer, hold steady, or type the number.');
+        return;
+      }
+      setBarcode(code);
+      await lookup(code);
+    } catch {
+      setBarcodeBusy('');
+      setError('Couldn’t read that photo. Try again or type the number.');
+    }
+  };
+
   // No live camera (old browser, desktop without webcam): use the phone's own camera app.
   const cameraUnavailable = useCallback(() => {
     setCameraOpen(false);
     captureRef.current?.click();
   }, []);
 
-  const analyze = async () => {
-    if (mode === 'text' && !ingredients.trim()) { setError('Add ingredients first.'); return; }
-    if (mode === 'photo' && !image) { setError('Add a photo first.'); return; }
+  // `found` is a barcode lookup result: its ingredient list is checked like typed text.
+  const analyze = async (found = null) => {
+    if (!found && mode === 'text' && !ingredients.trim()) { setError('Add ingredients first.'); return; }
+    if (!found && mode === 'photo' && !image) { setError('Add a photo first.'); return; }
 
     setError('');
     setStep(0);
@@ -63,9 +117,11 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
     const controller = new AbortController();
     abortRef.current = controller;
     try {
-      const body = { productType, productName, profile };
-      if (mode === 'photo') body.image = { mediaType: image.mediaType, data: image.base64 };
-      else body.ingredients = ingredients;
+      const body = found
+        ? { productType: found.productType, productName: found.productName || '', profile, ingredients: found.ingredients }
+        : { productType, productName, profile };
+      if (!found && mode === 'photo') body.image = { mediaType: image.mediaType, data: image.base64 };
+      else if (!found) body.ingredients = ingredients;
 
       const res = await fetch('/api/analyze', {
         method: 'POST',
@@ -79,7 +135,8 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
       onResult({
         ...data,
         scannedAt: new Date().toISOString(),
-        ...(mode === 'photo' ? { preview: image.preview, thumb: image.thumb } : {}),
+        ...(found ? { barcode: found.code, source: found.source, thumb: found.image || undefined } : {}),
+        ...(!found && mode === 'photo' ? { preview: image.preview, thumb: image.thumb } : {}),
       });
     } catch (e) {
       setLoading(false);
@@ -96,12 +153,41 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
         <button role="tab" aria-selected={mode === 'photo'} className={mode === 'photo' ? 'is-active' : ''} onClick={() => setMode('photo')}>
           <Camera size={17} /> Photo
         </button>
+        <button role="tab" aria-selected={mode === 'barcode'} className={mode === 'barcode' ? 'is-active' : ''} onClick={() => { setMode('barcode'); setError(''); }}>
+          <ScanBarcode size={17} /> Barcode
+        </button>
         <button role="tab" aria-selected={mode === 'text'} className={mode === 'text' ? 'is-active' : ''} onClick={() => setMode('text')}>
-          <Keyboard size={17} /> Type or paste
+          <Keyboard size={17} /> Type
         </button>
       </div>
 
-      {mode === 'photo' ? (
+      {mode === 'barcode' ? (
+        <div className="drop">
+          <span className="drop__title">Scan the barcode</span>
+          <span className="drop__hint">We’ll find the ingredients for you.</span>
+          <div className="drop__actions">
+            <button className="btn btn--primary" onClick={() => barcodeRef.current?.click()} disabled={!!barcodeBusy}>
+              <Camera size={18} /> Snap barcode
+            </button>
+          </div>
+          <form
+            className="barcode-entry"
+            onSubmit={e => { e.preventDefault(); lookup(barcode.trim()); }}
+          >
+            <input
+              className="input input--white"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              value={barcode}
+              onChange={e => setBarcode(e.target.value.replace(/\D/g, '').slice(0, 14))}
+              placeholder="Or type the number"
+              aria-label="Barcode number"
+            />
+            <button className="btn btn--ghost" type="submit" disabled={!!barcodeBusy || barcode.length < 8}>Look up</button>
+          </form>
+          {barcodeBusy && <p className="barcode-busy"><LoaderCircle size={16} className="spin" /> {barcodeBusy}</p>}
+        </div>
+      ) : mode === 'photo' ? (
         image ? (
           <div className="photo">
             <img src={image.preview} alt="Ingredient label to check" />
@@ -137,6 +223,7 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
       )}
       <input ref={fileRef} type="file" accept="image/*" hidden onChange={e => { pickFile(e.target.files[0]); e.target.value = ''; }} />
       <input ref={captureRef} type="file" accept="image/*" capture="environment" hidden onChange={e => { pickFile(e.target.files[0]); e.target.value = ''; }} />
+      <input ref={barcodeRef} type="file" accept="image/*" capture="environment" hidden onChange={e => { pickBarcodePhoto(e.target.files[0]); e.target.value = ''; }} />
       {cameraOpen && (
         <CameraView
           onCapture={file => { setCameraOpen(false); pickFile(file); }}
@@ -145,7 +232,7 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
         />
       )}
 
-      <div className="field-row">
+      {mode !== 'barcode' && <div className="field-row">
         <label className="field">
           <span className="label">Product type</span>
           <select className="input" value={productType} onChange={e => setProductType(e.target.value)}>
@@ -156,7 +243,7 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
           <span className="label">Name <span className="label__opt">optional</span></span>
           <input className="input" value={productName} onChange={e => setProductName(e.target.value)} placeholder="e.g. Wai Wai" />
         </label>
-      </div>
+      </div>}
 
       <p className="profile-note">
         Checking for <b>{profile.type}</b>
@@ -170,7 +257,18 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
         </div>
       )}
 
-      <button className="btn btn--primary btn--block btn--big" onClick={analyze} disabled={loading}>Check</button>
+      {notice && (
+        <div className="notice" role="status">
+          <p>{notice}</p>
+          <button className="btn btn--primary" onClick={() => { setNotice(null); setMode('photo'); }}>
+            <Camera size={18} /> Snap the ingredients
+          </button>
+        </div>
+      )}
+
+      {mode !== 'barcode' && (
+        <button className="btn btn--primary btn--block btn--big" onClick={() => analyze()} disabled={loading}>Check</button>
+      )}
 
       {loading && (
         <div className="analyzing" role="dialog" aria-modal="true" aria-label="Checking ingredients">

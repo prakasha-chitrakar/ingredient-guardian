@@ -187,6 +187,76 @@ async function askClaude(env, input) {
   return extractJson(message.content.filter(b => b.type === 'text').map(b => b.text).join(''));
 }
 
+// ---------- Barcode lookup (Open Food Facts, then Open Beauty Facts) ----------
+
+const LOOKUP_UA = 'IngredientGuardian/2.0 (https://ingredient-guardian.prakasha.workers.dev)';
+const LOOKUP_FIELDS = 'code,product_name,brands,ingredients_text,ingredients_text_en,categories_tags,image_front_small_url';
+const DATABASES = [
+  { host: 'world.openfoodfacts.org', source: 'Open Food Facts' },
+  { host: 'world.openbeautyfacts.org', source: 'Open Beauty Facts' },
+];
+
+// Category tags look like "en:beverages" or "en:plant-based-foods-and-beverages", so
+// match whole tags; a substring match would call noodles a beverage.
+function guessType(categories = [], source) {
+  const has = (re) => categories.some(t => re.test(t.replace(/^[a-z]{2}:/, '')));
+  if (source === 'Open Beauty Facts') {
+    if (has(/^(hair|shampoos?|conditioners?|hair-)/)) return 'Hair Care';
+    if (has(/^(make-?up|lipsticks?|mascaras?|foundations?)/)) return 'Makeup';
+    if (has(/^baby/)) return 'Baby Product';
+    return 'Cosmetic/Skincare';
+  }
+  if (has(/^(beverages|drinks|sodas|juices|fruit-juices|waters|teas|coffees|carbonated-drinks)$/)) return 'Beverage';
+  if (has(/^(sauces|condiments|ketchup|spreads)$/)) return 'Condiment';
+  if (has(/^(dietary-supplements|vitamins|food-supplements)$/)) return 'Vitamin/Supplement';
+  if (has(/^(baby-foods|infant-formulas?)$/)) return 'Baby Product';
+  return 'Food';
+}
+
+function productLabel(brands, name) {
+  const brand = brands?.split(',')[0]?.trim();
+  if (!name) return brand || null;
+  // "COCA-COLA SERVICES SA/NV" + "Coca-Cola Original" → just the product name.
+  const brandWord = brand?.split(/\s+/)[0]?.toLowerCase();
+  return brand && !name.toLowerCase().includes(brandWord) ? `${brand} ${name}` : name;
+}
+
+async function lookupBarcode(request, env, ctx) {
+  const code = new URL(request.url).searchParams.get('code') || '';
+  if (!/^\d{8,14}$/.test(code)) return Response.json({ error: 'That doesn’t look like a barcode number.' }, { status: 400 });
+
+  const key = `barcode:v2:${code}`;
+  const cached = env.ANSWERS ? await env.ANSWERS.get(key, 'json').catch(() => null) : null;
+  if (cached) return Response.json(cached);
+
+  let found = null;
+  for (const db of DATABASES) {
+    try {
+      const res = await fetch(`https://${db.host}/api/v2/product/${code}.json?fields=${LOOKUP_FIELDS}`, { headers: { 'User-Agent': LOOKUP_UA } });
+      if (!res.ok) continue;
+      const data = await res.json();
+      if (data.status !== 1 || !data.product) continue;
+      const p = data.product;
+      found = {
+        found: true,
+        code,
+        source: db.source,
+        productName: productLabel(p.brands, p.product_name?.trim()),
+        ingredients: (p.ingredients_text_en || p.ingredients_text || '').replace(/\s+/g, ' ').trim(),
+        productType: guessType(p.categories_tags, db.source),
+        image: p.image_front_small_url || null,
+      };
+      if (found.ingredients) break;
+    } catch {
+      // Database unreachable: try the next one.
+    }
+  }
+
+  const body = found || { found: false, code };
+  if (env.ANSWERS) ctx.waitUntil(env.ANSWERS.put(key, JSON.stringify(body), { expirationTtl: 60 * 60 * 24 * 7 }).catch(() => {}));
+  return Response.json(body);
+}
+
 // Same label + same profile + same AI → same key. Text is normalised so spacing and
 // capitalisation don't matter; photos are keyed by a hash of their bytes.
 async function cacheKey(input, env) {
@@ -240,6 +310,7 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     if (url.pathname === '/api/analyze') return analyze(request, env, ctx);
+    if (url.pathname === '/api/barcode') return lookupBarcode(request, env, ctx);
     return Response.json({ error: 'Not found' }, { status: 404 });
   },
 };

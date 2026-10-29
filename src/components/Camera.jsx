@@ -22,7 +22,12 @@ export default function Camera({ onCapture, onClose, onUnavailable }) {
       .then(stream => {
         if (cancelled) { stream.getTracks().forEach(t => t.stop()); return; }
         streamRef.current = stream;
-        videoRef.current.srcObject = stream;
+        const video = videoRef.current;
+        video.srcObject = stream;
+        // Some browsers grant access but never deliver frames (a black screen).
+        setTimeout(() => {
+          if (!cancelled && !video.videoWidth) setState('unavailable');
+        }, 3000);
         setState('live');
       })
       .catch(err => {

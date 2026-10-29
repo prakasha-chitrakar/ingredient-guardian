@@ -5,10 +5,10 @@ import { PRODUCT_TYPES, prepareImage } from '../lib';
 
 const STEPS = ['Reading…', 'Checking…', 'Almost done…'];
 
-// iPhone/iPad browsers other than Safari (Brave, Chrome, Firefox) can't open a live
-// camera feed for websites, but all of them can open the iOS camera from a file input.
-const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
-  || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+// Phones and tablets use their own camera app (a capture file input): it works in every
+// mobile browser, including iOS Brave/Chrome/Firefox, which can't stream the camera to
+// websites. The in-page live camera is only used on laptops and desktops.
+const USE_NATIVE_CAMERA = navigator.maxTouchPoints > 0 && window.matchMedia('(pointer: coarse)').matches;
 
 export default function Scan({ profile, onResult, initialMode = 'photo' }) {
   const [mode, setMode] = useState(initialMode);
@@ -105,7 +105,7 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
             <span className="drop__title">Snap the label</span>
             <span className="drop__hint">Whole list, good light.</span>
             <div className="drop__actions">
-              <button className="btn btn--primary" onClick={() => (IS_IOS ? captureRef.current?.click() : setCameraOpen(true))}>
+              <button className="btn btn--primary" onClick={() => (USE_NATIVE_CAMERA ? captureRef.current?.click() : setCameraOpen(true))}>
                 <Camera size={18} /> Take photo
               </button>
               <button className="btn btn--ghost" onClick={() => fileRef.current?.click()}><ImageUp size={18} /> Gallery</button>

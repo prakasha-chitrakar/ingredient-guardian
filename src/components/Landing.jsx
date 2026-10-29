@@ -1,6 +1,7 @@
 import { ArrowRight } from 'lucide-react';
 import FactsPanel from './FactsPanel';
 import { Brand } from './Nav';
+import { Credit } from './About';
 
 const EXAMPLE = {
   productName: 'Plain Greek yogurt',
@@ -25,6 +26,7 @@ export default function Landing({ onStart }) {
         Check a label <ArrowRight size={18} />
       </button>
       <p className="note">AI can be wrong. Not medical advice.</p>
+      <Credit />
     </div>
   );
 }

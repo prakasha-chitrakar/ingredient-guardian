@@ -119,5 +119,7 @@ export function timeAgo(iso) {
   if (diff < 60) return 'Just now';
   if (diff < 3600) return `${Math.floor(diff / 60)} min ago`;
   if (diff < 86400) return `${Math.floor(diff / 3600)} h ago`;
-  return new Date(iso).toLocaleDateString();
+  if (diff < 2 * 86400) return 'Yesterday';
+  if (diff < 7 * 86400) return `${Math.floor(diff / 86400)} days ago`;
+  return new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short' });
 }

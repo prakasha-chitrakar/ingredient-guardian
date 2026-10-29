@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Camera, ImageUp, Keyboard, LoaderCircle, TriangleAlert, X } from 'lucide-react';
 import CameraView from './Camera';
+import Illustration from './Illustrations';
+import discoveries from '../content/discoveries.json';
 import { PRODUCT_TYPES, prepareImage } from '../lib';
 
-const STEPS = ['Reading…', 'Checking…', 'Almost done…'];
+const STEPS = ['Reading the label…', 'Checking each ingredient…', 'Matching your profile…', 'Almost done…'];
 
 // Phones and tablets use their own camera app (a capture file input): it works in every
 // mobile browser, including iOS Brave/Chrome/Firefox, which can't stream the camera to
@@ -15,7 +17,9 @@ const USE_NATIVE_CAMERA = window.matchMedia('(pointer: coarse)').matches
 export default function Scan({ profile, onResult, initialMode = 'photo' }) {
   const [mode, setMode] = useState(initialMode);
   const [cameraOpen, setCameraOpen] = useState(false);
+  const [fact, setFact] = useState(() => Math.floor(Math.random() * discoveries.length));
   const captureRef = useRef(null);
+  const abortRef = useRef(null);
   const [productType, setProductType] = useState('Food');
   const [productName, setProductName] = useState('');
   const [ingredients, setIngredients] = useState('');
@@ -27,8 +31,9 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
 
   useEffect(() => {
     if (!loading) return;
-    const id = setInterval(() => setStep(s => Math.min(s + 1, STEPS.length - 1)), 2200);
-    return () => clearInterval(id);
+    const steps = setInterval(() => setStep(s => Math.min(s + 1, STEPS.length - 1)), 4000);
+    const facts = setInterval(() => setFact(f => (f + 1) % discoveries.length), 7000);
+    return () => { clearInterval(steps); clearInterval(facts); };
   }, [loading]);
 
   const pickFile = async (file) => {
@@ -55,6 +60,8 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
     setError('');
     setStep(0);
     setLoading(true);
+    const controller = new AbortController();
+    abortRef.current = controller;
     try {
       const body = { productType, productName, profile };
       if (mode === 'photo') body.image = { mediaType: image.mediaType, data: image.base64 };
@@ -64,6 +71,7 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
+        signal: controller.signal,
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || `The server returned an error (${res.status}).`);
@@ -74,8 +82,9 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
         ...(mode === 'photo' ? { preview: image.preview, thumb: image.thumb } : {}),
       });
     } catch (e) {
-      setError(e.message === 'Failed to fetch' ? 'No connection. Try again.' : e.message);
       setLoading(false);
+      if (e.name === 'AbortError') return;
+      setError(e.message === 'Failed to fetch' ? 'No connection. Try again.' : e.message);
     }
   };
 
@@ -161,13 +170,25 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
         </div>
       )}
 
-      {loading ? (
-        <div className="loading" aria-live="polite">
-          <LoaderCircle size={20} className="spin" />
-          {STEPS[step]}
+      <button className="btn btn--primary btn--block btn--big" onClick={analyze} disabled={loading}>Check</button>
+
+      {loading && (
+        <div className="analyzing" role="dialog" aria-modal="true" aria-label="Checking ingredients">
+          <div className="analyzing__card">
+            <p className="analyzing__status" aria-live="polite">
+              <LoaderCircle size={20} className="spin" /> {STEPS[step]}
+            </p>
+            <div className="analyzing__bar"><span /></div>
+
+            <div className="analyzing__fact" key={discoveries[fact].id}>
+              <Illustration name={discoveries[fact].visual} className="analyzing__art" />
+              <p className="eyebrow">While you wait</p>
+              <p className="analyzing__headline">{discoveries[fact].headline}</p>
+            </div>
+
+            <button className="btn btn--ghost btn--block" onClick={() => abortRef.current?.abort()}>Cancel</button>
+          </div>
         </div>
-      ) : (
-        <button className="btn btn--primary btn--block" onClick={analyze}>Check</button>
       )}
     </div>
   );

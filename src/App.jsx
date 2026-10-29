@@ -5,6 +5,8 @@ import Scan from './components/Scan';
 import Results from './components/Results';
 import Profile from './components/Profile';
 import Compare from './components/Compare';
+import History from './components/History';
+import About from './components/About';
 import Nav from './components/Nav';
 import { load, save } from './lib';
 
@@ -27,6 +29,7 @@ export default function App() {
   };
 
   const handleResult = (r) => {
+    navigator.vibrate?.(30); // a small tap on Android when results arrive
     setResult(r);
     // Keep history light: drop the full-size photo, keep the thumbnail.
     const { preview, ...stored } = r;
@@ -38,6 +41,9 @@ export default function App() {
     setScanMode(mode);
     setPage('scan');
   };
+
+  const deleteCheck = (index) => setHistory(prev => prev.filter((_, i) => i !== index));
+  const restoreCheck = (item, index) => setHistory(prev => [...prev.slice(0, index), item, ...prev.slice(index)]);
 
   const openFromHistory = (r) => {
     setResult(r);
@@ -55,15 +61,27 @@ export default function App() {
             profile={profile}
             onScan={scan}
             onOpen={openFromHistory}
-            onClear={() => setHistory([])}
+            onSeeAll={() => setPage('history')}
             onCompare={() => setPage('compare')}
             onProfile={() => setPage('profile')}
+            onAbout={() => setPage('about')}
           />
         )}
+        {page === 'history' && (
+          <History
+            history={history}
+            onOpen={openFromHistory}
+            onDelete={deleteCheck}
+            onRestore={restoreCheck}
+            onClear={() => setHistory([])}
+            onBack={() => setPage('home')}
+          />
+        )}
+        {page === 'about' && <About onBack={() => setPage('home')} />}
         {page === 'scan' && <Scan key={scanMode} profile={profile} onResult={handleResult} initialMode={scanMode} />}
         {page === 'compare' && <Compare history={history} onBack={() => setPage('home')} />}
-        {page === 'results' && <Results result={result} onScanAgain={() => setPage('scan')} />}
-        {page === 'profile' && <Profile profile={profile} onChange={setProfile} />}
+        {page === 'results' && <Results result={result} onScanAgain={() => scan('photo')} onBack={() => setPage('home')} />}
+        {page === 'profile' && <Profile profile={profile} onChange={setProfile} onAbout={() => setPage('about')} />}
       </main>
       <Nav current={page} onNavigate={setPage} />
     </>

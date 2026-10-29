@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { ArrowRight, Camera } from 'lucide-react';
 import { Brand } from './Nav';
 import { Decoder, DiscoveryCard, DiscoverySheet } from './Discovery';
+import { CREATORS } from './About';
 import discoveries from '../content/discoveries.json';
 import decoder from '../content/decoder.json';
 import { isFlagged, pickDiscovery, scanText, scoreTone, timeAgo } from '../lib';
@@ -38,7 +39,7 @@ function weeklyRecap(history) {
   };
 }
 
-export default function Home({ history, profile, onScan, onOpen, onClear, onCompare, onProfile }) {
+export default function Home({ history, profile, onScan, onOpen, onSeeAll, onCompare, onProfile, onAbout }) {
   const stage = history.length === 0 ? 'new' : history.length >= 5 ? 'frequent' : 'returning';
   const [headline] = useState(() => {
     const list = HEADLINES[stage === 'new' ? 'new' : 'returning'];
@@ -56,10 +57,6 @@ export default function Home({ history, profile, onScan, onOpen, onClear, onComp
   const recap = stage === 'frequent' ? weeklyRecap(history) : null;
   const hasPreferences = profile.allergies.length || profile.medical.length || profile.lifestyle.length || profile.type !== 'Adult';
   const last = history[0];
-
-  const clear = () => {
-    if (window.confirm('Clear all checks?')) onClear();
-  };
 
   return (
     <div className="screen screen--home">
@@ -90,7 +87,7 @@ export default function Home({ history, profile, onScan, onOpen, onClear, onComp
         <section>
           <div className="section-head">
             <h2 className="h2">Remember these?</h2>
-            <button className="link" onClick={clear}>Clear</button>
+            <button className="link" onClick={onSeeAll}>See all</button>
           </div>
           <ul className="shelf">
             {history.slice(0, 10).map((r, i) => {
@@ -139,6 +136,10 @@ export default function Home({ history, profile, onScan, onOpen, onClear, onComp
         <h2 className="h2 section-title">Ingredient decoder</h2>
         <Decoder items={decoderItems} scannedText={scannedText} />
       </section>
+
+      <button className="credit credit--link" onClick={onAbout}>
+        Made by {CREATORS.join(' & ')}
+      </button>
 
       {sheetOpen && pick && (
         <DiscoverySheet

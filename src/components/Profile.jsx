@@ -1,4 +1,5 @@
-import { Check } from 'lucide-react';
+import { Check, ChevronRight } from 'lucide-react';
+import { Credit } from './About';
 
 const TYPES = ['Adult', 'Child', 'Baby', 'Pregnant', 'Elderly'];
 const GROUPS = [
@@ -16,7 +17,7 @@ function Chip({ label, active, onClick }) {
   );
 }
 
-export default function Profile({ profile, onChange }) {
+export default function Profile({ profile, onChange, onAbout }) {
   const toggle = (field, value) => {
     const list = profile[field] || [];
     onChange({ ...profile, [field]: list.includes(value) ? list.filter(x => x !== value) : [...list, value] });
@@ -42,6 +43,12 @@ export default function Profile({ profile, onChange }) {
           </div>
         </section>
       ))}
+
+      <button className="nudge" onClick={onAbout}>
+        <span><b>About this app</b></span>
+        <ChevronRight size={18} />
+      </button>
+      <Credit />
     </div>
   );
 }

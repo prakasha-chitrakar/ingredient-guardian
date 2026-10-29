@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronDown, CircleCheck, ScanLine, Share2, TriangleAlert } from 'lucide-react';
+import { ArrowLeft, ChevronDown, CircleCheck, ScanLine, Share2, TriangleAlert } from 'lucide-react';
 import FactsPanel from './FactsPanel';
 import { STATUS, isFlagged } from '../lib';
 
@@ -57,7 +57,7 @@ function IngredientRow({ ingredient }) {
   );
 }
 
-export default function Results({ result, onScanAgain }) {
+export default function Results({ result, onScanAgain, onBack }) {
   const [tab, setTab] = useState('flagged');
   const [shareNote, setShareNote] = useState('');
 
@@ -78,7 +78,12 @@ export default function Results({ result, onScanAgain }) {
   const list = tab === 'flagged' ? flagged : ingredients;
 
   const share = async () => {
-    const text = `${productName || 'Product'}: ${overallScore}/100 (${scoreLabel}). Checked with Ingredient Guardian.`;
+    const watch = flagged.slice(0, 3).map(i => i.name).join(', ');
+    const text = [
+      `${productName || 'Product'}: ${overallScore}/100, ${scoreLabel}.`,
+      watch && `Watch: ${watch}.`,
+      `Checked with Ingredient Guardian: ${window.location.origin}`,
+    ].filter(Boolean).join('\n');
     try {
       if (navigator.share) {
         await navigator.share({ text });
@@ -94,6 +99,7 @@ export default function Results({ result, onScanAgain }) {
 
   return (
     <div className="screen">
+      <button className="back" onClick={onBack}><ArrowLeft size={18} /> Home</button>
       {result.preview && <img className="result-photo" src={result.preview} alt="Checked label" />}
 
       <FactsPanel result={result} />

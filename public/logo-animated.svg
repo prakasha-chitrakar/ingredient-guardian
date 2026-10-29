@@ -1,71 +1,38 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
-  <!-- Animated version of logo.svg for the loading screen. Same drawing, plus:
-       bubbles rise, orbits turn, liquid ripples, a scan line sweeps. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <!-- Animated "Bubble flask" for the loading screen: same drawing as logo.svg, plus
+       bubbles rising through the flask, a gentle breathing squish, a floating
+       electron and a soft glow. -->
   <style>
-    .orbits { transform-origin: 60px 66px; animation: spin 14s linear infinite; }
-    .wave { animation: wave 3.2s linear infinite; }
-    .bubble { animation: rise 2.8s ease-in infinite; opacity: 0; }
+    .halo { transform-origin: 60px 78px; animation: halo 3s ease-in-out infinite; }
+    .flask { transform-origin: 60px 105px; animation: breathe 3s ease-in-out infinite; }
+    .electron { animation: bob 3s ease-in-out infinite; }
+    .bubble { animation: rise 2.7s ease-in infinite; }
     .bubble.b2 { animation-delay: 0.9s; }
     .bubble.b3 { animation-delay: 1.8s; }
-    .scan { animation: sweep 2.6s ease-in-out infinite alternate; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes wave { from { transform: translateX(0); } to { transform: translateX(-24px); } }
+    @keyframes halo { 0%, 100% { transform: scale(0.9); opacity: 0.35; } 50% { transform: scale(1.12); opacity: 0.65; } }
+    @keyframes breathe { 50% { transform: scale(1.025, 0.975); } }
+    @keyframes bob { 50% { transform: translate(-2px, -5px); } }
     @keyframes rise {
-      0% { transform: translateY(6px); opacity: 0; }
-      25% { opacity: 1; }
-      100% { transform: translateY(-16px); opacity: 0; }
+      0% { transform: translateY(8px); opacity: 0; }
+      20% { opacity: 1; }
+      85% { opacity: 1; }
+      100% { transform: translateY(-38px); opacity: 0; }
     }
-    @keyframes sweep { from { transform: translateY(0); } to { transform: translateY(84px); } }
     @media (prefers-reduced-motion: reduce) {
-      .orbits, .wave, .bubble, .scan { animation: none; }
-      .bubble { opacity: 1; }
+      .halo, .flask, .electron, .bubble { animation: none; }
     }
   </style>
   <defs>
-    <clipPath id="bulb"><circle cx="60" cy="72" r="21"/></clipPath>
-    <clipPath id="frame"><rect x="14" y="14" width="92" height="92" rx="10"/></clipPath>
+    <mask id="bubbles">
+      <rect width="120" height="120" fill="#fff"/>
+      <circle class="bubble" cx="52" cy="88" r="6" fill="#000"/>
+      <circle class="bubble b2" cx="66" cy="84" r="4.5" fill="#000"/>
+      <circle class="bubble b3" cx="58" cy="90" r="3.5" fill="#000"/>
+    </mask>
   </defs>
-
-  <g stroke="#3F4D34" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12 32V22q0-10 10-10h10"/>
-    <path d="M88 12h10q10 0 10 10v10"/>
-    <path d="M12 88v10q0 10 10 10h10"/>
-    <path d="M108 88v10q0 10-10 10H88"/>
+  <circle class="halo" cx="60" cy="78" r="34" fill="#EFB6A2"/>
+  <g class="flask">
+    <path fill="#3F4D34" mask="url(#bubbles)" d="M48.5 15H71.5A6.5 6.5 0 0 1 71.5 28H69V49Q69 53 73 54.3A27 27 0 1 1 47 54.3Q51 53 51 49V28H48.5A6.5 6.5 0 0 1 48.5 15Z"/>
   </g>
-
-  <g class="orbits">
-    <g stroke="#9DAA6B" stroke-width="3.2" stroke-linecap="round">
-      <ellipse cx="60" cy="66" rx="42" ry="14" transform="rotate(-24 60 66)"/>
-      <ellipse cx="60" cy="66" rx="42" ry="14" transform="rotate(24 60 66)"/>
-    </g>
-    <circle cx="96" cy="50" r="6.5" fill="#C5D7E3" stroke="#3F4D34" stroke-width="3"/>
-  </g>
-
-  <g stroke="#3F4D34" stroke-width="6" stroke-linejoin="round">
-    <rect x="50" y="30" width="20" height="26" rx="3"/>
-    <circle cx="60" cy="72" r="24"/>
-    <rect x="45" y="24" width="30" height="8" rx="4" fill="#C5D7E3"/>
-  </g>
-  <g fill="#F4F8FB">
-    <rect x="50" y="32" width="20" height="26"/>
-    <circle cx="60" cy="72" r="24"/>
-  </g>
-
-  <g clip-path="url(#bulb)">
-    <path class="wave" d="M36 67q6-4.5 12 0t12 0 12 0 12 0 12 0 12 0V100H36z" fill="#EFB6A2"/>
-    <g stroke-linecap="round" stroke-width="3.4">
-      <path d="M48 76h22" stroke="#3F4D34"/>
-      <path d="M48 82.5h16" stroke="#C47A5F"/>
-      <path d="M51 89h12" stroke="#C47A5F"/>
-    </g>
-  </g>
-
-  <circle class="bubble" cx="54" cy="62" r="3" fill="#EFB6A2"/>
-  <circle class="bubble b2" cx="64" cy="60" r="2" fill="#EFB6A2"/>
-  <circle class="bubble b3" cx="59" cy="63" r="2.4" fill="#EFB6A2"/>
-  <path d="M43.5 68q1-7 6.5-11" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/>
-
-  <g clip-path="url(#frame)">
-    <rect class="scan" x="14" y="16" width="92" height="3" rx="1.5" fill="#EFB6A2" opacity="0.85"/>
-  </g>
+  <circle class="electron" cx="93" cy="50" r="8" fill="#3F4D34"/>
 </svg>

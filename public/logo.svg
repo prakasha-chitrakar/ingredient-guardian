@@ -1,50 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" fill="none">
-  <!-- Ingredient Guardian mark: a round flask (with an ingredient list in the
-       liquid) inside scan brackets, circled by atom orbits. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <!-- Ingredient Guardian mark, "Bubble flask": one soft flask shape with bubbles
+       cut through it, and an electron floating beside it. Single colour. -->
   <defs>
-    <clipPath id="bulb"><circle cx="60" cy="72" r="21"/></clipPath>
+    <mask id="bubbles">
+      <rect width="120" height="120" fill="#fff"/>
+      <circle cx="52" cy="84" r="7" fill="#000"/>
+      <circle cx="67" cy="72" r="4.5" fill="#000"/>
+      <circle cx="60" cy="45" r="3" fill="#000"/>
+    </mask>
   </defs>
-
-  <!-- Scan brackets -->
-  <g stroke="#3F4D34" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M12 32V22q0-10 10-10h10"/>
-    <path d="M88 12h10q10 0 10 10v10"/>
-    <path d="M12 88v10q0 10 10 10h10"/>
-    <path d="M108 88v10q0 10-10 10H88"/>
+  <g fill="#3F4D34">
+    <!-- Lip, neck and bulb as one outline, with soft fillets where the neck meets the bulb -->
+    <path mask="url(#bubbles)" d="M48.5 15H71.5A6.5 6.5 0 0 1 71.5 28H69V49Q69 53 73 54.3A27 27 0 1 1 47 54.3Q51 53 51 49V28H48.5A6.5 6.5 0 0 1 48.5 15Z"/>
+    <circle cx="93" cy="50" r="8"/>
   </g>
-
-  <!-- Atom orbits (behind the flask) -->
-  <g stroke="#9DAA6B" stroke-width="3.2" stroke-linecap="round">
-    <ellipse cx="60" cy="66" rx="42" ry="14" transform="rotate(-24 60 66)"/>
-    <ellipse cx="60" cy="66" rx="42" ry="14" transform="rotate(24 60 66)"/>
-  </g>
-
-  <!-- Flask: outline first, then the glass fill hides the inner joins -->
-  <g stroke="#3F4D34" stroke-width="6" stroke-linejoin="round">
-    <rect x="50" y="30" width="20" height="26" rx="3"/>
-    <circle cx="60" cy="72" r="24"/>
-    <rect x="45" y="24" width="30" height="8" rx="4" fill="#C5D7E3"/>
-  </g>
-  <g fill="#F4F8FB">
-    <rect x="50" y="32" width="20" height="26"/>
-    <circle cx="60" cy="72" r="24"/>
-  </g>
-
-  <!-- Liquid with an ingredient list in it -->
-  <g clip-path="url(#bulb)">
-    <path d="M36 67q6-4.5 12 0t12 0 12 0 12 0V100H36z" fill="#EFB6A2"/>
-    <g stroke-linecap="round" stroke-width="3.4">
-      <path d="M48 76h22" stroke="#3F4D34"/>
-      <path d="M48 82.5h16" stroke="#C47A5F"/>
-      <path d="M51 89h12" stroke="#C47A5F"/>
-    </g>
-  </g>
-
-  <!-- Bubbles and a glass highlight -->
-  <circle cx="54" cy="59" r="3" fill="#EFB6A2"/>
-  <circle cx="64" cy="53" r="2" fill="#EFB6A2"/>
-  <path d="M43.5 68q1-7 6.5-11" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/>
-
-  <!-- Electron -->
-  <circle cx="96" cy="50" r="6.5" fill="#C5D7E3" stroke="#3F4D34" stroke-width="3"/>
 </svg>

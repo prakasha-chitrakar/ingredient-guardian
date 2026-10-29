@@ -18,7 +18,7 @@ function Chip({ label, active, onClick }) {
   );
 }
 
-export default function Profile({ profile, onChange, onAbout, onClearAll }) {
+export default function Profile({ profile, onChange, onAbout, onClearAll, onHowTo }) {
   const toggle = (field, value) => {
     const list = profile[field] || [];
     onChange({ ...profile, [field]: list.includes(value) ? list.filter(x => x !== value) : [...list, value] });
@@ -66,6 +66,10 @@ export default function Profile({ profile, onChange, onAbout, onClearAll }) {
         </button>
       </section>
 
+      <button className="nudge" onClick={onHowTo}>
+        <span><b>How to use Unlabel</b></span>
+        <ChevronRight size={18} />
+      </button>
       <button className="nudge" onClick={onAbout}>
         <span><b>About this app</b></span>
         <ChevronRight size={18} />

@@ -631,6 +631,50 @@ textarea.input { resize: vertical; }
 .tile--pink { background: var(--highlight-soft); }
 .tile--blue { background: var(--surface); }
 
+/* ---------- Onboarding ---------- */
+
+.onboarding {
+  min-height: 100vh; max-width: 480px; margin: 0 auto;
+  padding: 20px var(--gutter) calc(24px + env(safe-area-inset-bottom));
+  display: flex; flex-direction: column; gap: 18px;
+  touch-action: pan-y;
+}
+.onboarding__top { display: flex; align-items: center; justify-content: space-between; }
+.onboarding__top img { width: 34px; height: 34px; }
+.onboarding__dots { display: flex; gap: 6px; }
+.onboarding__dots span { height: 6px; flex: 1; border-radius: 3px; background: var(--surface-strong); transition: background-color 0.3s; }
+.onboarding__dots span.is-done { background: var(--pine-glade); }
+.onboarding__dots span.is-active { background: var(--accent); }
+.onboarding__step { flex: 1; display: flex; flex-direction: column; gap: 16px; animation: rise-in 0.45s cubic-bezier(.2,.7,.2,1) both; }
+.onboarding__title { font-size: 36px; line-height: 1.08; letter-spacing: -0.02em; margin-top: -10px; }
+.onboarding__nav { display: grid; grid-template-columns: auto 1fr; gap: 10px; }
+.onboarding__nav .btn--ghost { width: 56px; padding: 0; }
+
+.ob-ways { display: flex; flex-direction: column; gap: 10px; }
+.ob-ways li {
+  display: flex; align-items: center; gap: 14px; padding: 16px;
+  border-radius: var(--radius); background: var(--glass-bg-strong); border: 1px solid var(--glass-border);
+  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+}
+.ob-ways li div { display: flex; flex-direction: column; }
+.ob-ways b { font-family: var(--font-display); font-size: var(--text-body); font-weight: 800; }
+.ob-ways li span:not(.ob-ways__icon) { font-size: var(--text-caption); color: var(--muted); line-height: 1.4; }
+.ob-ways__icon { width: 48px; height: 48px; border-radius: 16px; flex-shrink: 0; display: grid; place-items: center; background: var(--accent); color: var(--paper-white); }
+.ob-ways__icon--pink { background: var(--highlight); color: var(--ink); }
+.ob-ways__icon--blue { background: var(--botticelli); color: var(--ink); }
+.ob-ways__icon--pine { background: var(--pine-glade); color: var(--ink); }
+
+.ob-profile { display: flex; flex-direction: column; gap: 10px; }
+.ob-label { font-weight: 800; font-family: var(--font-display); font-size: var(--text-body); margin-top: 6px; }
+.ob-profile .chip { background: var(--glass-bg-strong); border: 1px solid var(--glass-border); }
+.ob-profile .chip.is-active { background: var(--accent); color: var(--paper-white); border-color: var(--accent); }
+.ob-note { font-size: var(--text-caption); color: var(--muted); margin-top: 6px; }
+
+.ob-verdict__panel { transform: scale(0.94); transform-origin: top center; margin-bottom: -16px; }
+.ob-tips { display: flex; flex-direction: column; gap: 8px; }
+.ob-tips li { display: flex; align-items: center; gap: 10px; font-size: var(--text-body-sm); font-weight: 600; }
+.ob-tips svg { color: var(--accent); flex-shrink: 0; }
+
 /* Read more links on risky ingredients */
 .readmore { background: var(--paper-white); border-radius: 20px; padding: 14px 16px 6px; }
 .readmore__title { font-size: var(--text-tiny); font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 4px; }

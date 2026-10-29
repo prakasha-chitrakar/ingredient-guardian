@@ -7,6 +7,7 @@ import Profile from './components/Profile';
 import Compare from './components/Compare';
 import History from './components/History';
 import About from './components/About';
+import Onboarding from './components/Onboarding';
 import Nav from './components/Nav';
 import { load, save } from './lib';
 
@@ -23,9 +24,16 @@ export default function App() {
   useEffect(() => { save('ig.profile', profile); }, [profile]);
   useEffect(() => { window.scrollTo(0, 0); }, [page]);
 
-  const start = () => {
+  // First start: show the walkthrough once, then open the scan screen in the chosen mode.
+  const [afterOnboarding, setAfterOnboarding] = useState('photo');
+  const start = (mode = 'photo') => {
     save('ig.seenIntro', true);
-    setPage('scan');
+    if (!load('ig.onboarded', false)) {
+      setAfterOnboarding(mode);
+      setPage('onboarding');
+      return;
+    }
+    scan(mode);
   };
 
   const handleResult = (r) => {
@@ -60,11 +68,25 @@ export default function App() {
 
   const ambient = <div className="ambient" aria-hidden="true"><span /><span /><span /></div>;
 
+  const finishOnboarding = () => {
+    save('ig.onboarded', true);
+    scan(afterOnboarding);
+  };
+
+  if (page === 'onboarding') {
+    return (
+      <>
+        {ambient}
+        <Onboarding profile={profile} onProfileChange={setProfile} onDone={finishOnboarding} />
+      </>
+    );
+  }
+
   if (page === 'landing') {
     return (
       <>
         {ambient}
-        <Landing onStart={start} onBarcode={() => { save('ig.seenIntro', true); scan('barcode'); }} />
+        <Landing onStart={() => start('photo')} onBarcode={() => start('barcode')} />
       </>
     );
   }
@@ -99,7 +121,7 @@ export default function App() {
         {page === 'scan' && <Scan key={scanMode} profile={profile} onResult={handleResult} initialMode={scanMode} />}
         {page === 'compare' && <Compare history={history} onBack={() => setPage('home')} />}
         {page === 'results' && <Results result={result} onScanAgain={() => scan('photo')} onBack={() => setPage('home')} />}
-        {page === 'profile' && <Profile profile={profile} onChange={setProfile} onAbout={() => setPage('about')} onClearAll={clearAll} />}
+        {page === 'profile' && <Profile profile={profile} onChange={setProfile} onAbout={() => setPage('about')} onClearAll={clearAll} onHowTo={() => { setAfterOnboarding('photo'); setPage('onboarding'); }} />}
       </main>
       <Nav current={page} onNavigate={setPage} />
     </>

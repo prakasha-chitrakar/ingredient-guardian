@@ -1,26 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-27 0 234 234">
   <!-- Unlabel mark: a round flask with a sprouting leaf and a bubble cut through it.
-       Traced from design/unlabel-logo-reference.png. Single colour. -->
-  <defs>
-    <mask id="cutouts">
-      <rect x="-27" width="234" height="234" fill="#fff"/>
-      <g fill="#000" stroke="#000" stroke-linecap="round" stroke-linejoin="round">
-        <!-- big leaf -->
-        <path stroke-width="3" d="M66 196C60 150 95 108 143 99C145 140 115 185 66 196Z"/>
-        <!-- small leaf -->
-        <path stroke-width="3" d="M59 182C40 178 28 160 29 132C48 138 60 155 59 182Z"/>
-        <!-- stem -->
-        <path fill="none" stroke-width="10" d="M57 213Q60 199 69 187"/>
-        <!-- bubble -->
-        <circle cx="119" cy="79" r="9.5"/>
-      </g>
-      <!-- leaf vein: put a thin line of flask colour back through the big leaf -->
-      <path d="M70 190Q88 152 116 127" fill="none" stroke="#fff" stroke-width="6.5" stroke-linecap="round"/>
-    </mask>
-  </defs>
-  <g fill="#3F4D34" mask="url(#cutouts)">
-    <rect x="42" y="0" width="98" height="15" rx="6"/>
-    <rect x="57" y="10" width="67" height="70"/>
-    <circle cx="90" cy="144" r="90"/>
-  </g>
+       One compound path with fill-rule="evenodd" (no masks), so iPhone browsers
+       render it as sharp vectors. Traced from design/unlabel-logo-reference.png. -->
+  <path fill="#3F4D34" fill-rule="evenodd" d="M48 0H134A6 6 0 0 1 140 6V9A6 6 0 0 1 134 15H124V60.67A90 90 0 1 1 57 60.27V15H48A6 6 0 0 1 42 9V6A6 6 0 0 1 48 0ZM128.5 79A9.5 9.5 0 1 0 109.5 79A9.5 9.5 0 1 0 128.5 79ZM52.55 210.75L62 197C60 150 95 108 143 99C145 140 115 185 70 199.5L61.45 215.25A5 5 0 0 1 52.55 210.75ZM59 182C40 178 28 160 29 132C48 138 60 155 59 182ZM67.07 188.6Q85.4 150.05 113.82 124.56A3.25 3.25 0 0 1 118.18 129.44Q90.6 153.95 72.93 191.4A3.25 3.25 0 0 1 67.07 188.6Z"/>
 </svg>

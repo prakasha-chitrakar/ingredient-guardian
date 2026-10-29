@@ -43,48 +43,17 @@
     <noscript>Unlabel needs JavaScript turned on.</noscript>
     <div id="splash" aria-hidden="true">
       <svg class="splash__logo" xmlns="http://www.w3.org/2000/svg" viewBox="-27 -40 234 274" width="132" height="154" aria-hidden="true">
-        <!-- Animated Unlabel mark for the loading screen: same drawing as logo.svg, plus
-             swaying leaves, a bobbing bubble, tiny bubbles drifting out of the neck and a
-             soft glow behind. -->
         <style>
           .halo { transform-origin: 90px 144px; animation: halo 3.2s ease-in-out infinite; }
-          .sprout { transform-origin: 57px 213px; animation: sway 3.2s ease-in-out infinite; }
-          .bubble { transform-origin: 119px 79px; animation: bob 2.4s ease-in-out infinite; }
           .steam { animation: steam 2.8s ease-out infinite; opacity: 0; }
           .steam.s2 { animation-delay: 0.9s; }
           .steam.s3 { animation-delay: 1.8s; }
           @keyframes halo { 0%, 100% { transform: scale(0.9); opacity: 0.35; } 50% { transform: scale(1.08); opacity: 0.6; } }
-          @keyframes sway { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(4deg); } }
-          @keyframes bob { 50% { transform: translateY(-5px) scale(1.08); } }
-          @keyframes steam {
-            0% { transform: translateY(0); opacity: 0; }
-            20% { opacity: 1; }
-            100% { transform: translateY(-38px); opacity: 0; }
-          }
-          @media (prefers-reduced-motion: reduce) {
-            .halo, .sprout, .bubble, .steam { animation: none; }
-          }
+          @keyframes steam { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: 1; } 100% { transform: translateY(-38px); opacity: 0; } }
+          @media (prefers-reduced-motion: reduce) { .halo, .steam { animation: none; } }
         </style>
-        <defs>
-          <mask id="splash-cutouts">
-            <rect x="-27" y="-40" width="234" height="274" fill="#fff"/>
-            <g class="sprout">
-              <g fill="#000" stroke="#000" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke-width="3" d="M66 196C60 150 95 108 143 99C145 140 115 185 66 196Z"/>
-                <path stroke-width="3" d="M59 182C40 178 28 160 29 132C48 138 60 155 59 182Z"/>
-                <path fill="none" stroke-width="10" d="M57 213Q60 199 69 187"/>
-              </g>
-              <path d="M70 190Q88 152 116 127" fill="none" stroke="#fff" stroke-width="6.5" stroke-linecap="round"/>
-            </g>
-            <circle class="bubble" cx="119" cy="79" r="9.5" fill="#000"/>
-          </mask>
-        </defs>
         <circle class="halo" cx="90" cy="144" r="104" fill="#EFB6A2"/>
-        <g fill="#3F4D34" mask="url(#splash-cutouts)">
-          <rect x="42" y="0" width="98" height="15" rx="6"/>
-          <rect x="57" y="10" width="67" height="70"/>
-          <circle cx="90" cy="144" r="90"/>
-        </g>
+        <path fill="#3F4D34" fill-rule="evenodd" d="M48 0H134A6 6 0 0 1 140 6V9A6 6 0 0 1 134 15H124V60.67A90 90 0 1 1 57 60.27V15H48A6 6 0 0 1 42 9V6A6 6 0 0 1 48 0ZM128.5 79A9.5 9.5 0 1 0 109.5 79A9.5 9.5 0 1 0 128.5 79ZM52.55 210.75L62 197C60 150 95 108 143 99C145 140 115 185 70 199.5L61.45 215.25A5 5 0 0 1 52.55 210.75ZM59 182C40 178 28 160 29 132C48 138 60 155 59 182ZM67.07 188.6Q85.4 150.05 113.82 124.56A3.25 3.25 0 0 1 118.18 129.44Q90.6 153.95 72.93 191.4A3.25 3.25 0 0 1 67.07 188.6Z"/>
         <g fill="#3F4D34">
           <circle class="steam" cx="84" cy="-6" r="5"/>
           <circle class="steam s2" cx="98" cy="-4" r="3.5"/>

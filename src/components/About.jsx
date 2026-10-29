@@ -13,11 +13,11 @@ export default function About({ onBack }) {
     <div className="screen">
       <button className="back" onClick={onBack}><ArrowLeft size={18} /> Back</button>
       <Brand />
-      <h1 className="h1"><span className="tone-orange">Know</span> what you eat.</h1>
-      <p className="lede">Scan any label. Get a plain-language read on what’s inside and what matters for you.</p>
+      <h1 className="h1"><span className="tone-orange">Know</span> what’s inside.</h1>
+      <p className="lede">Scan any label. Get the plain-English version—and what matters to you.</p>
 
       <section className="group about">
-        <h2 className="h3">Created by</h2>
+        <h2 className="h3">Made by</h2>
         <ul className="creators">
           {CREATORS.map(name => (
             <li key={name}>
@@ -31,9 +31,9 @@ export default function About({ onBack }) {
       <section className="group about">
         <h2 className="h3">How it works</h2>
         <ol className="steps">
-          <li>Snap or type an ingredient list.</li>
-          <li>AI reads each ingredient against your profile.</li>
-          <li>Your checks stay on this phone only.</li>
+          <li>Snap or type the ingredients.</li>
+          <li>AI checks each ingredient against your profile.</li>
+          <li>Your checks stay on this phone.</li>
         </ol>
       </section>
 

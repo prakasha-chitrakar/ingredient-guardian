@@ -35,53 +35,53 @@ export default function Onboarding({ profile, onProfileChange, onDone }) {
   const steps = [
     {
       kicker: 'Step 1',
-      title: <>Pick how to <span className="tone-orange">check.</span></>,
+      title: <>Choose how to <span className="tone-orange">check it.</span></>,
       body: (
         <ul className="ob-ways">
-          <li><span className="ob-ways__icon"><Camera size={20} /></span><div><b>Photo</b><span>Snap the ingredient list on the back.</span></div></li>
-          <li><span className="ob-ways__icon"><ScanBarcode size={20} /></span><div><b>Barcode</b><span>Scan the stripes. We find the ingredients.</span></div></li>
-          <li><span className="ob-ways__icon"><Keyboard size={20} /></span><div><b>Type</b><span>Paste or type the list yourself.</span></div></li>
+          <li><span className="ob-ways__icon"><Camera size={20} /></span><div><b>Photo</b><span>Snap the ingredients on the back.</span></div></li>
+          <li><span className="ob-ways__icon"><ScanBarcode size={20} /></span><div><b>Barcode</b><span>Scan the barcode. We’ll find the ingredients.</span></div></li>
+          <li><span className="ob-ways__icon"><Keyboard size={20} /></span><div><b>Type</b><span>Paste or type the list.</span></div></li>
         </ul>
       ),
     },
     {
       kicker: 'Step 2',
-      title: <>Tell us about <span className="tone-orange">you.</span></>,
+      title: <>Tell us a little <span className="tone-orange">about you.</span></>,
       body: (
         <div className="ob-profile">
           <p className="ob-label">Who are you checking for?</p>
           <div className="chips">
             {TYPES.map(t => <Chip key={t} label={t} active={profile.type === t} onClick={() => onProfileChange({ ...profile, type: t })} />)}
           </div>
-          <p className="ob-label">Any allergies?</p>
+          <p className="ob-label">Any allergies to flag?</p>
           <div className="chips">
             {ALLERGIES.map(a => <Chip key={a} label={a} active={profile.allergies?.includes(a)} onClick={() => toggleAllergy(a)} />)}
           </div>
-          <p className="ob-note">Optional. Change it any time in Profile. It stays on your phone.</p>
+          <p className="ob-note">Optional. Edit anytime. Your info stays on your phone.</p>
         </div>
       ),
     },
     {
       kicker: 'Step 3',
-      title: <>Read your <span className="tone-orange">verdict.</span></>,
+      title: <>Get your <span className="tone-orange">verdict.</span></>,
       body: (
         <div className="ob-verdict">
           <div className="ob-verdict__panel"><FactsPanel result={EXAMPLE} example /></div>
           <ul className="ob-tips">
-            <li><ChevronDown size={18} /> Tap any ingredient to see why it’s flagged.</li>
-            <li><ArrowRight size={18} /> Follow the source links to read more and decide.</li>
+            <li><ChevronDown size={18} /> Tap an ingredient to see why it’s flagged.</li>
+            <li><ArrowRight size={18} /> Check the sources. Make up your own mind.</li>
           </ul>
         </div>
       ),
     },
     {
       kicker: 'Step 4',
-      title: <>Learn as you <span className="tone-orange">go.</span></>,
+      title: <>Pick up facts <span className="tone-orange">as you go.</span></>,
       body: (
         <ul className="ob-ways">
-          <li><span className="ob-ways__icon ob-ways__icon--pink"><Lightbulb size={20} /></span><div><b>Daily facts</b><span>Matched to what you scan, with sources.</span></div></li>
-          <li><span className="ob-ways__icon ob-ways__icon--blue"><History size={20} /></span><div><b>Your checks</b><span>Saved on your phone. Search them any time.</span></div></li>
-          <li><span className="ob-ways__icon ob-ways__icon--pine"><GitCompareArrows size={20} /></span><div><b>Compare</b><span>Put two products side by side.</span></div></li>
+          <li><span className="ob-ways__icon ob-ways__icon--pink"><Lightbulb size={20} /></span><div><b>Daily facts</b><span>Facts picked for your scans, with sources.</span></div></li>
+          <li><span className="ob-ways__icon ob-ways__icon--blue"><History size={20} /></span><div><b>Your checks</b><span>Saved on your phone. Find them anytime.</span></div></li>
+          <li><span className="ob-ways__icon ob-ways__icon--pine"><GitCompareArrows size={20} /></span><div><b>Compare</b><span>Compare two products, side by side.</span></div></li>
         </ul>
       ),
     },
@@ -122,10 +122,10 @@ export default function Onboarding({ profile, onProfileChange, onDone }) {
 
       <footer className="onboarding__nav">
         {step > 0
-          ? <button className="btn btn--ghost" onClick={back} aria-label="Previous step"><ArrowLeft size={18} /></button>
+          ? <button className="btn btn--ghost" onClick={back} aria-label="Back"><ArrowLeft size={18} /></button>
           : <span />}
         <button className="btn btn--primary btn--big" onClick={next}>
-          {last ? 'Start checking' : 'Next'} <ArrowRight size={18} />
+          {last ? 'Let’s check' : 'Next'} <ArrowRight size={18} />
         </button>
       </footer>
     </div>

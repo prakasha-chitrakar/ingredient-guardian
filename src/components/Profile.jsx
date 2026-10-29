@@ -26,7 +26,7 @@ export default function Profile({ profile, onChange, onAbout, onClearAll, onHowT
 
   return (
     <div className="screen">
-      <h1 className="h1"><span className="tone-green">Personalise</span> your checks</h1>
+      <h1 className="h1"><span className="tone-green">Make checks</span> personal</h1>
       <p className="lede">Saved on this phone.</p>
 
       <section className="group">
@@ -47,7 +47,7 @@ export default function Profile({ profile, onChange, onAbout, onClearAll, onHowT
 
       <section className="group">
         <h2 className="h3">What do you scan most?</h2>
-        <p className="group__hint">Pre-selected on every scan. You can still change it.</p>
+        <p className="group__hint">We’ll preselect this each time. You can change it anytime.</p>
         <select
           className="input input--white"
           value={profile.defaultType || 'Food'}
@@ -60,18 +60,18 @@ export default function Profile({ profile, onChange, onAbout, onClearAll, onHowT
 
       <section className="group">
         <h2 className="h3">Your data</h2>
-        <p className="group__hint">Your profile and checks live only on this phone.</p>
+        <p className="group__hint">Your profile and checks stay on this phone.</p>
         <button className="btn btn--danger btn--block" onClick={onClearAll}>
-          <Trash2 size={18} /> Clear all my data
+          <Trash2 size={18} /> Clear my data
         </button>
       </section>
 
       <button className="nudge" onClick={onHowTo}>
-        <span><b>How to use Unlabel</b></span>
+        <span><b>How Unlabel works</b></span>
         <ChevronRight size={18} />
       </button>
       <button className="nudge" onClick={onAbout}>
-        <span><b>About this app</b></span>
+        <span><b>About Unlabel</b></span>
         <ChevronRight size={18} />
       </button>
       <Credit />

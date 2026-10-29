@@ -34,10 +34,10 @@ export default function FactsPanel({ result, example = false }) {
   const counts = countStatuses(result);
 
   return (
-    <section className="facts" aria-label="Safety summary">
+    <section className="facts" aria-label="Safety snapshot">
       <div className="facts__top">
         <div>
-          <p className="facts__eyebrow">{[productType, example && 'Example'].filter(Boolean).join(' · ')}</p>
+          <p className="facts__eyebrow">{[productType, example && 'For example'].filter(Boolean).join(' · ')}</p>
           <h2 className="facts__name">{productName || 'Unnamed product'}</h2>
           <p className="facts__verdict" style={{ color: scoreTone(overallScore) }}>{scoreLabel}</p>
         </div>

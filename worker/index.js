@@ -66,7 +66,7 @@ function pickList(value, allowed) {
 }
 
 function readRequest(body) {
-  if (!body || typeof body !== 'object') throw new InputError('Request body must be JSON.');
+  if (!body || typeof body !== 'object') throw new InputError('Request must be valid JSON.');
 
   const productType = PRODUCT_TYPES.includes(body.productType) ? body.productType : 'Food';
   const productName = pickString(body.productName, 120);
@@ -80,13 +80,13 @@ function readRequest(body) {
 
   if (body.image) {
     const { mediaType, data } = body.image;
-    if (!IMAGE_TYPES.includes(mediaType)) throw new InputError('Photo must be a JPEG, PNG or WebP image.');
-    if (typeof data !== 'string' || !data || data.length > MAX_IMAGE_BASE64) throw new InputError('Photo is missing or too large.');
+    if (!IMAGE_TYPES.includes(mediaType)) throw new InputError('Use a JPEG, PNG or WebP photo.');
+    if (typeof data !== 'string' || !data || data.length > MAX_IMAGE_BASE64) throw new InputError('Photo missing or too large.');
     return { productType, productName, profile, image: { mediaType, data } };
   }
 
   const ingredients = pickString(body.ingredients, MAX_INGREDIENTS_CHARS);
-  if (!ingredients) throw new InputError('Add an ingredient list or a photo of the label.');
+  if (!ingredients) throw new InputError('Add an ingredient list or a label photo.');
   return { productType, productName, profile, ingredients };
 }
 
@@ -117,11 +117,11 @@ ${SCHEMA}`;
 export function extractJson(text) {
   const start = text.indexOf('{');
   const end = text.lastIndexOf('}');
-  if (start === -1 || end <= start) throw new UserFacingError('The analysis came back in an unexpected format. Try again.', 502);
+  if (start === -1 || end <= start) throw new UserFacingError('We couldn’t read the result. Try again.', 502);
   try {
     return JSON.parse(text.slice(start, end + 1));
   } catch {
-    throw new UserFacingError('The analysis came back in an unexpected format. Try again.', 502);
+    throw new UserFacingError('We couldn’t read the result. Try again.', 502);
   }
 }
 
@@ -144,9 +144,9 @@ async function askWorkersAI(env, input) {
   } catch (e) {
     console.error('Workers AI failed', e);
     if (/daily free allocation|neurons|4006/i.test(e.message)) {
-      throw new UserFacingError('Daily free limit reached. Try again tomorrow.', 429);
+      throw new UserFacingError('You’ve used today’s free checks. Come back tomorrow.', 429);
     }
-    throw new UserFacingError('The AI service is busy. Try again.', 502);
+    throw new UserFacingError('We’re busy right now. Try again shortly.', 502);
   }
 
   // Some models return the JSON already parsed.
@@ -175,14 +175,14 @@ async function askClaude(env, input) {
       messages: [{ role: 'user', content }],
     });
   } catch (e) {
-    if (e instanceof Anthropic.RateLimitError) throw new UserFacingError('Too many checks right now. Try again in a minute.', 429);
+    if (e instanceof Anthropic.RateLimitError) throw new UserFacingError('Too many checks at once. Try again in a minute.', 429);
     if (e instanceof Anthropic.AuthenticationError) throw new UserFacingError('The server API key is invalid.', 500);
     if (e instanceof Anthropic.APIError) throw new UserFacingError(`Anthropic API error (${e.status}): ${e.message}`, 502);
     throw e;
   }
 
-  if (message.stop_reason === 'refusal') throw new UserFacingError('This product could not be analyzed. Try a clearer ingredient list.', 422);
-  if (message.stop_reason === 'max_tokens') throw new UserFacingError('The ingredient list is too long. Try a shorter list.', 422);
+  if (message.stop_reason === 'refusal') throw new UserFacingError('Couldn’t analyse this product. Try a clearer label.', 422);
+  if (message.stop_reason === 'max_tokens') throw new UserFacingError('That list is too long. Try a shorter one.', 422);
 
   return extractJson(message.content.filter(b => b.type === 'text').map(b => b.text).join(''));
 }
@@ -223,7 +223,7 @@ function productLabel(brands, name) {
 
 async function lookupBarcode(request, env, ctx) {
   const code = new URL(request.url).searchParams.get('code') || '';
-  if (!/^\d{8,14}$/.test(code)) return Response.json({ error: 'That doesn’t look like a barcode number.' }, { status: 400 });
+  if (!/^\d{8,14}$/.test(code)) return Response.json({ error: 'That barcode doesn’t look right.' }, { status: 400 });
 
   const key = `barcode:v2:${code}`;
   const cached = env.ANSWERS ? await env.ANSWERS.get(key, 'json').catch(() => null) : null;
@@ -282,7 +282,7 @@ async function analyze(request, env, ctx) {
   try {
     input = readRequest(await request.json());
   } catch (e) {
-    const message = e instanceof InputError ? e.message : 'Request body must be JSON.';
+    const message = e instanceof InputError ? e.message : 'Request must be valid JSON.';
     return Response.json({ error: message }, { status: 400 });
   }
 
@@ -302,7 +302,7 @@ async function analyze(request, env, ctx) {
   } catch (e) {
     if (e instanceof UserFacingError) return Response.json({ error: e.message }, { status: e.status });
     console.error('analyze failed', e);
-    return Response.json({ error: 'Analysis failed. Try again.' }, { status: 500 });
+    return Response.json({ error: 'Check failed. Try again.' }, { status: 500 });
   }
 }
 

@@ -6,7 +6,7 @@ import discoveries from '../content/discoveries.json';
 import { PRODUCT_TYPES, prepareImage } from '../lib';
 import { isBarcode, readBarcode } from '../barcode';
 
-const STEPS = ['Reading the small print…', 'Interrogating the preservatives…', 'Asking the sugar to explain itself…', 'Checking it against you…', 'Writing the verdict…'];
+const STEPS = ['Reading the label…', 'The preservatives are up next…', 'Asking the sugar some questions…', 'Checking it against your profile…', 'Putting your verdict together…'];
 
 // Phones and tablets use their own camera app (a capture file input): it works in every
 // mobile browser, including iOS Brave/Chrome/Firefox, which can't stream the camera to
@@ -54,14 +54,14 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
 
   // Barcode: read the number from a photo (or typed), look it up, then check its ingredients.
   const lookup = async (code) => {
-    if (!isBarcode(code)) { setError('A barcode is 8 to 14 digits, found under the stripes.'); return; }
+    if (!isBarcode(code)) { setError('Barcode numbers are usually under the stripes (8–14 digits).'); return; }
     setError('');
     setNotice(null);
     setBarcodeBusy('Looking it up…');
     try {
       const res = await fetch(`/api/barcode?code=${code}`);
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.error || 'Lookup failed. Try again.');
+      if (!res.ok) throw new Error(data.error || 'Couldn’t find it. Try again.');
       setBarcodeBusy('');
       if (data.found && data.ingredients) {
         setProductName(data.productName || '');
@@ -72,11 +72,11 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
         if (data.productType) setProductType(data.productType);
         setNotice(data.found
           ? `Found ${data.productName || 'it'}, but nobody has added its ingredients yet.`
-          : 'Not in the database yet. Even the barcode is keeping secrets.');
+          : 'Not in our database yet. This one’s a mystery.');
       }
     } catch (e) {
       setBarcodeBusy('');
-      setError(e.message === 'Failed to fetch' ? 'No connection. Try again.' : e.message);
+      setError(e.message === 'Failed to fetch' ? 'You’re offline. Try again when you’re connected.' : e.message);
     }
   };
 
@@ -89,14 +89,14 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
       const code = await readBarcode(file);
       if (!code) {
         setBarcodeBusy('');
-        setError('Couldn’t read a barcode. Get closer, hold steady, or type the number.');
+        setError('Barcode not clear. Move closer, hold steady, or type it in.');
         return;
       }
       setBarcode(code);
       await lookup(code);
     } catch {
       setBarcodeBusy('');
-      setError('Couldn’t read that photo. Try again or type the number.');
+      setError('Photo didn’t come through clearly. Try again or type the barcode.');
     }
   };
 
@@ -108,7 +108,7 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
 
   // `found` is a barcode lookup result: its ingredient list is checked like typed text.
   const analyze = async (found = null) => {
-    if (!found && mode === 'text' && !ingredients.trim()) { setError('Add ingredients first.'); return; }
+    if (!found && mode === 'text' && !ingredients.trim()) { setError('Add the ingredients first.'); return; }
     if (!found && mode === 'photo' && !image) { setError('Add a photo first.'); return; }
 
     setError('');
@@ -141,7 +141,7 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
     } catch (e) {
       setLoading(false);
       if (e.name === 'AbortError') return;
-      setError(e.message === 'Failed to fetch' ? 'No connection. Try again.' : e.message);
+      setError(e.message === 'Failed to fetch' ? 'You’re offline. Try again when you’re connected.' : e.message);
     }
   };
 
@@ -149,7 +149,7 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
     <div className="screen">
       <h1 className="h1"><span className="tone-orange">Check</span> a label</h1>
 
-      <div className="seg" role="tablist" aria-label="How to add ingredients">
+      <div className="seg" role="tablist" aria-label="Add ingredients">
         <button role="tab" aria-selected={mode === 'photo'} className={mode === 'photo' ? 'is-active' : ''} onClick={() => setMode('photo')}>
           <Camera size={17} /> Photo
         </button>
@@ -163,11 +163,11 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
 
       {mode === 'barcode' ? (
         <div className="drop">
-          <span className="drop__title">Scan the barcode</span>
-          <span className="drop__hint">We’ll find the ingredients for you.</span>
+          <span className="drop__title">Scan a barcode</span>
+          <span className="drop__hint">We’ll look up the ingredients.</span>
           <div className="drop__actions">
             <button className="btn btn--primary" onClick={() => barcodeRef.current?.click()} disabled={!!barcodeBusy}>
-              <Camera size={18} /> Snap barcode
+              <Camera size={18} /> Scan barcode
             </button>
           </div>
           <form
@@ -180,17 +180,17 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
               pattern="[0-9]*"
               value={barcode}
               onChange={e => setBarcode(e.target.value.replace(/\D/g, '').slice(0, 14))}
-              placeholder="Or type the number"
+              placeholder="Or type it in"
               aria-label="Barcode number"
             />
-            <button className="btn btn--ghost" type="submit" disabled={!!barcodeBusy || barcode.length < 8}>Look up</button>
+            <button className="btn btn--ghost" type="submit" disabled={!!barcodeBusy || barcode.length < 8}>Find product</button>
           </form>
           {barcodeBusy && <p className="barcode-busy"><LoaderCircle size={16} className="spin" /> {barcodeBusy}</p>}
         </div>
       ) : mode === 'photo' ? (
         image ? (
           <div className="photo">
-            <img src={image.preview} alt="Ingredient label to check" />
+            <img src={image.preview} alt="Ingredients to check" />
             <button className="photo__remove" onClick={() => setImage(null)} aria-label="Remove photo"><X size={16} /></button>
           </div>
         ) : (
@@ -200,12 +200,12 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
             onDrop={e => { e.preventDefault(); pickFile(e.dataTransfer.files[0]); }}
           >
             <span className="drop__title">Snap the label</span>
-            <span className="drop__hint">Whole list, good light.</span>
+            <span className="drop__hint">Get the full list in good light.</span>
             <div className="drop__actions">
               <button className="btn btn--primary" onClick={() => (USE_NATIVE_CAMERA ? captureRef.current?.click() : setCameraOpen(true))}>
                 <Camera size={18} /> Take photo
               </button>
-              <button className="btn btn--ghost" onClick={() => fileRef.current?.click()}><ImageUp size={18} /> Gallery</button>
+              <button className="btn btn--ghost" onClick={() => fileRef.current?.click()}><ImageUp size={18} /> Choose from gallery</button>
             </div>
           </div>
         )
@@ -217,7 +217,7 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
             rows={7}
             value={ingredients}
             onChange={e => setIngredients(e.target.value)}
-            placeholder="Water, sugar, citric acid, sodium benzoate, natural flavours…"
+            placeholder="e.g. Water, sugar, citric acid…"
           />
         </label>
       )}
@@ -240,14 +240,14 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
           </select>
         </label>
         <label className="field">
-          <span className="label">Name <span className="label__opt">optional</span></span>
+          <span className="label">Product name <span className="label__opt">optional</span></span>
           <input className="input" value={productName} onChange={e => setProductName(e.target.value)} placeholder="e.g. Wai Wai" />
         </label>
       </div>}
 
       <p className="profile-note">
-        Checking for <b>{profile.type}</b>
-        {profile.allergies.length > 0 && <> · allergic to {profile.allergies.join(', ').toLowerCase()}</>}
+        Check for <b>{profile.type}</b>
+        {profile.allergies.length > 0 && <> · allergy to {profile.allergies.join(', ').toLowerCase()}</>}
       </p>
 
       {error && (
@@ -261,7 +261,7 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
         <div className="notice" role="status">
           <p>{notice}</p>
           <button className="btn btn--primary" onClick={() => { setNotice(null); setMode('photo'); }}>
-            <Camera size={18} /> Snap the ingredients
+            <Camera size={18} /> Scan the ingredients
           </button>
         </div>
       )}
@@ -271,7 +271,7 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
       )}
 
       {loading && (
-        <div className="analyzing" role="dialog" aria-modal="true" aria-label="Checking ingredients">
+        <div className="analyzing" role="dialog" aria-modal="true" aria-label="Checking ingredients…">
           <div className="analyzing__card">
             <p className="analyzing__status" aria-live="polite">
               <LoaderCircle size={20} className="spin" /> {STEPS[step]}
@@ -280,11 +280,11 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
 
             <div className="analyzing__fact" key={discoveries[fact].id}>
               <Illustration name={discoveries[fact].visual} className="analyzing__art" />
-              <p className="eyebrow">While you wait</p>
+              <p className="eyebrow">While we check…</p>
               <p className="analyzing__headline">{discoveries[fact].headline}</p>
             </div>
 
-            <button className="btn btn--ghost btn--block" onClick={() => abortRef.current?.abort()}>Cancel</button>
+            <button className="btn btn--ghost btn--block" onClick={() => abortRef.current?.abort()}>Stop</button>
           </div>
         </div>
       )}

@@ -44,7 +44,7 @@ export default function History({ history, onOpen, onDelete, onRestore, onClear,
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder="Search products or ingredients"
-            aria-label="Search checks"
+            aria-label="Search your checks"
           />
         </label>
       )}
@@ -52,12 +52,12 @@ export default function History({ history, onOpen, onDelete, onRestore, onClear,
       {history.length === 0 ? (
         <div className="empty">
           <p className="empty__title">No checks yet</p>
-          <p>Suspiciously innocent. Scan something.</p>
+          <p>Nothing to see here. Scan your first product.</p>
         </div>
       ) : shown.length === 0 ? (
         <div className="empty">
           <p className="empty__title">No matches</p>
-          <p>Nothing here by that name. Lucky you.</p>
+          <p>No results for that name. Try another.</p>
         </div>
       ) : (
         <ul className="list">

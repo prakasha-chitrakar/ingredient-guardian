@@ -33,7 +33,7 @@ export default function Compare({ history, onBack }) {
       <div className="screen">
         <button className="back" onClick={onBack}><ArrowLeft size={18} /> Home</button>
         <div className="empty">
-          <p className="empty__title">Scan two products first</p>
+          <p className="empty__title">Check two products first</p>
           <p>Then compare them here.</p>
         </div>
       </div>
@@ -84,7 +84,7 @@ export default function Compare({ history, onBack }) {
         <div className="compare__row"><span>Type</span><span>{A.productType || '—'}</span><span>{B.productType || '—'}</span></div>
         <div className="compare__row"><span>Ingredients</span><span>{ca.count}</span><span>{cb.count}</span></div>
         <div className="compare__row"><span>Flagged</span><span>{ca.flagged.length}</span><span>{cb.flagged.length}</span></div>
-        <div className="compare__row"><span>Affects you</span><span>{ca.forYou.length}</span><span>{cb.forYou.length}</span></div>
+        <div className="compare__row"><span>Relevant to you</span><span>{ca.forYou.length}</span><span>{cb.forYou.length}</span></div>
       </section>
 
       <section className="compare__cols">
@@ -101,11 +101,11 @@ export default function Compare({ history, onBack }) {
       <section className="compare__cols">
         <div>
           <h2 className="h3">Only in {A.productName || 'first'}</h2>
-          <IngredientList list={onlyA} empty="None." />
+          <IngredientList list={onlyA} empty="None" />
         </div>
         <div>
           <h2 className="h3">Only in {B.productName || 'second'}</h2>
-          <IngredientList list={onlyB} empty="None." />
+          <IngredientList list={onlyB} empty="None" />
         </div>
       </section>
 
@@ -114,7 +114,7 @@ export default function Compare({ history, onBack }) {
         <IngredientList list={shared} empty="No shared ingredients." />
       </section>
 
-      <p className="note">Differences only. Which suits you depends on your needs.</p>
+      <p className="note">Just the differences. The better pick depends on you.</p>
     </div>
   );
 }

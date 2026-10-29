@@ -69,7 +69,7 @@ function loadImage(file) {
     const url = URL.createObjectURL(file);
     const img = new Image();
     img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
-    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('This photo format can’t be opened. Try a JPEG or PNG.')); };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Can’t open this photo. Try a JPEG or PNG.')); };
     img.src = url;
   });
 }

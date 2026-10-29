@@ -58,18 +58,18 @@ export default function Camera({ onCapture, onClose, onUnavailable }) {
 
       {state === 'blocked' || state === 'unavailable' ? (
         <div className="camera__blocked">
-          <p className="h2">{state === 'blocked' ? 'Camera is blocked' : 'Live camera not available'}</p>
+          <p className="h2">{state === 'blocked' ? 'Camera access blocked' : 'Camera isn’t available'}</p>
           <p>
             {state === 'blocked'
-              ? 'Allow camera for this site in your browser settings, then try again.'
-              : 'Use your phone’s camera app instead.'}
+              ? 'Allow camera access in your browser settings, then try again.'
+              : 'Or use your phone’s camera app.'}
           </p>
-          <button className="btn btn--primary" onClick={onUnavailable}>Open camera app</button>
+          <button className="btn btn--primary" onClick={onUnavailable}>Open camera</button>
         </div>
       ) : (
         <>
           <video ref={videoRef} className="camera__video" autoPlay playsInline muted />
-          <p className="camera__hint">{state === 'live' ? 'Fit the whole ingredient list in the frame' : 'Asking for camera access…'}</p>
+          <p className="camera__hint">{state === 'live' ? 'Fit the full ingredient list in the frame.' : 'Opening camera…'}</p>
           <button className="camera__shutter" onClick={capture} disabled={state !== 'live'} aria-label="Take photo" />
         </>
       )}

@@ -10,17 +10,17 @@ import { isFlagged, rankDiscoveries, scanText, scoreTone, timeAgo } from '../lib
 // Two-tone headlines: [accent, rest].
 const HEADLINES = {
   new: [
-    ['You know the brand.', ' Do you know what’s inside?'],
-    ['Read the label', ' before it reads you.'],
-    ['Your snacks', ' have secrets. Let’s hear them.'],
+    ['Know the brand.', ' Know what’s inside?'],
+    ['Read the label', ' before it fools you.'],
+    ['Your snacks', ' have a few things to explain.'],
     ['Anything', ' in your cart today?'],
   ],
   returning: [
-    ['Did you check', ' the ingredients in your last purchase?'],
-    ['Back again.', ' The labels missed you.'],
-    ['Your cart', ' called. It has questions.'],
-    ['What have you', ' been eating lately? Be honest.'],
-    ['Today’s fact', ' might ruin a snack. Sorry.'],
+    ['Checked your last', ' purchase—or just trusted the packet?'],
+    ['You’re back.', ' The labels haven’t changed. Have you?'],
+    ['Your cart', ' has some explaining to do.'],
+    ['What’s been', ' making it onto your plate?'],
+    ['Today’s fact', ' may change snack time.'],
   ],
 };
 
@@ -65,7 +65,7 @@ export default function Home({ history, profile, onScan, onOpen, onSeeAll, onCom
     <div className="screen screen--home">
       <header className="home-top">
         <Brand />
-        <button className="glass home-top__who" onClick={onProfile} aria-label="Edit who you’re checking for">
+        <button className="glass home-top__who" onClick={onProfile} aria-label="Change who you’re checking for">
           <UserRound size={16} /> {profile.type}
         </button>
       </header>
@@ -76,13 +76,13 @@ export default function Home({ history, profile, onScan, onOpen, onSeeAll, onCom
           <h1 className="display-sm"><span className="tone-orange">{headline[0]}</span>{headline[1]}</h1>
           <p className="home-hero__lede">
             {stage === 'new'
-              ? 'Scan a packet. We’ll tell you what it isn’t telling you.'
+              ? 'Scan it. Find out what the label leaves out.'
               : `Last checked: ${last.productName || 'a product'}, ${timeAgo(last.scannedAt)}.`}
           </p>
           <button className="btn btn--primary btn--block btn--big" onClick={() => onScan('photo')}>
             <Camera size={20} /> Scan a product
           </button>
-          <div className="modes" role="group" aria-label="Other ways to check">
+          <div className="modes" role="group" aria-label="Or check another way">
             <button onClick={() => onScan('photo')}><ImageUp size={18} />Photo</button>
             <button onClick={() => onScan('barcode')}><ScanBarcode size={18} />Barcode</button>
             <button onClick={() => onScan('text')}><Keyboard size={18} />Type</button>
@@ -101,8 +101,8 @@ export default function Home({ history, profile, onScan, onOpen, onSeeAll, onCom
       {history.length > 0 && (
         <section>
           <div className="section-head">
-            <h2 className="h2">Remember these?</h2>
-            <button className="link" onClick={onSeeAll}>See all</button>
+            <h2 className="h2">Seen these before?</h2>
+            <button className="link" onClick={onSeeAll}>View all</button>
           </div>
           <ul className="shelf">
             {history.slice(0, 10).map((r, i) => {
@@ -125,7 +125,7 @@ export default function Home({ history, profile, onScan, onOpen, onSeeAll, onCom
 
       {history.length > 0 && !hasPreferences && (
         <button className="nudge" onClick={onProfile}>
-          <span><b>Get personal alerts.</b> Add allergies or diet to your profile.</span>
+          <span><b>Make checks personal.</b> Add allergies or diet preferences to your profile.</span>
           <ArrowRight size={18} />
         </button>
       )}
@@ -136,7 +136,7 @@ export default function Home({ history, profile, onScan, onOpen, onSeeAll, onCom
           <p className="recap__line">
             <b>{recap.count}</b> {recap.count === 1 ? 'product' : 'products'} checked, <b>{recap.flagged}</b> flagged {recap.flagged === 1 ? 'ingredient' : 'ingredients'}.
           </p>
-          {recap.top && <p className="recap__top">Came up most: {recap.top}</p>}
+          {recap.top && <p className="recap__top">Most common: {recap.top}</p>}
         </section>
       )}
 
@@ -150,7 +150,7 @@ export default function Home({ history, profile, onScan, onOpen, onSeeAll, onCom
           <button className="tile tile--blue" onClick={onCompare} disabled={history.length < 2}>
             <GitCompareArrows size={22} />
             <b>Compare</b>
-            <span>{history.length < 2 ? 'Needs 2 checks' : 'Side by side'}</span>
+            <span>{history.length < 2 ? 'Scan 2 products' : 'Side by side'}</span>
           </button>
         </div>
       )}

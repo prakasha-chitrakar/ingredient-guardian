@@ -24,7 +24,7 @@ function IngredientRow({ ingredient }) {
           <span className="ing__name">{ingredient.name}</span>
           <span className="ing__meta">
             <span className="ing__status" style={{ color: status.color }}>{status.label}</span>
-            {affectsYou && <span className="tag tag--you">Affects you</span>}
+            {affectsYou && <span className="tag tag--you">For you</span>}
           </span>
         </span>
         <ChevronDown size={16} className="ing__chev" />
@@ -32,7 +32,7 @@ function IngredientRow({ ingredient }) {
 
       {open && (
         <div className="ing__detail">
-          {ingredient.purpose && <p><b>Used for:</b> {ingredient.purpose}</p>}
+          {ingredient.purpose && <p><b>Used to:</b> {ingredient.purpose}</p>}
           {ingredient.concerns?.length > 0 && (
             <ul className="ing__concerns">
               {ingredient.concerns.map((c, i) => <li key={i}>{c}</li>)}
@@ -43,7 +43,7 @@ function IngredientRow({ ingredient }) {
           )}
           {(ingredient.status !== 'safe' || ingredient.concerns?.length > 0) && (
             <div className="readmore">
-              <p className="readmore__title">Read more and decide</p>
+              <p className="readmore__title">Read the sources. Decide for yourself.</p>
               <ul>
                 {readMoreLinks(ingredient).map(l => (
                   <li key={l.url}>
@@ -81,8 +81,8 @@ export default function Results({ result, onScanAgain, onBack }) {
     return (
       <div className="screen">
         <div className="empty">
-          <p className="empty__title">No results yet</p>
-          <p>Check a label to see results.</p>
+          <p className="empty__title">Nothing here yet</p>
+          <p>Check a label to see what’s inside.</p>
           <button className="btn btn--primary" onClick={onScanAgain}>Check a label</button>
         </div>
       </div>
@@ -105,7 +105,7 @@ export default function Results({ result, onScanAgain, onBack }) {
         await navigator.share({ text });
       } else {
         await navigator.clipboard.writeText(text);
-        setShareNote('Copied to clipboard');
+        setShareNote('Copied');
         setTimeout(() => setShareNote(''), 2000);
       }
     } catch {
@@ -120,7 +120,7 @@ export default function Results({ result, onScanAgain, onBack }) {
 
       <FactsPanel result={result} />
       {result.source && (
-        <p className="source-note">Ingredients from {result.source} · barcode {result.barcode}</p>
+        <p className="source-note">Ingredients in {result.source} · barcode {result.barcode}</p>
       )}
 
       {alerts.length > 0 && (
@@ -133,7 +133,7 @@ export default function Results({ result, onScanAgain, onBack }) {
 
       {ingredients.some(i => ['harmful', 'carcinogen'].includes(i.status)) && (
         <p className="decide-note">
-          Some ingredients have health concerns. Tap one to read trusted sources and decide for yourself.
+          Some ingredients raise questions. Tap one to see why, then check the sources.
         </p>
       )}
 
@@ -159,7 +159,7 @@ export default function Results({ result, onScanAgain, onBack }) {
       ) : list.length === 0 ? (
         <div className="all-clear">
           <CircleCheck size={22} />
-          {tab === 'flagged' ? 'Nothing flagged for you. Enjoy, responsibly.' : 'No ingredients found. Try a clearer photo.'}
+          {tab === 'flagged' ? 'Nothing flagged for you. Still, check the label.' : 'No ingredients found. Try a clearer photo.'}
         </div>
       ) : (
         <ul className="ings">{list.map((ing, i) => <IngredientRow key={`${ing.name}-${i}`} ingredient={ing} />)}</ul>

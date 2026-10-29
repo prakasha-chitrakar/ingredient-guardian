@@ -6,7 +6,7 @@ function formatDate(iso) {
   return new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-const TEASERS = ['Did you know?', 'Plot twist', 'Brace yourself', 'Small print, big news'];
+const TEASERS = ['Did you know?', 'Plot twist.', 'Wait for it.', 'Tiny print. Big reveal.'];
 
 function eyebrowFor({ reason, scan, typeName, item }) {
   if (reason === 'scan') return `About your ${scan.productName || 'last scan'}`;
@@ -28,9 +28,9 @@ export function DiscoveryCard({ pick, onOpen, onNext }) {
         <h2 className="discovery__headline">{item.headline}</h2>
         <p className="discovery__text">{item.explanation}</p>
         <div className="discovery__actions">
-          <button className="link link--arrow" onClick={onOpen}>Discover more <ArrowRight size={16} /></button>
-          <button className="discovery__next" onClick={onNext} aria-label="Show another fact">
-            <RefreshCw size={16} /> Another fact
+          <button className="link link--arrow" onClick={onOpen}>More to uncover <ArrowRight size={16} /></button>
+          <button className="discovery__next" onClick={onNext} aria-label="Hit me with another">
+            <RefreshCw size={16} /> Another one
           </button>
         </div>
       </div>
@@ -65,7 +65,7 @@ export function DiscoverySheet({ item, onClose, onNext, onScan }) {
 
           {item.howTo?.length > 0 && (
             <section>
-              <h3 className="h3">Check it on your label</h3>
+              <h3 className="h3">Find it on your label</h3>
               <ol className="steps">{item.howTo.map((s, i) => <li key={i}>{s}</li>)}</ol>
             </section>
           )}
@@ -83,7 +83,7 @@ export function DiscoverySheet({ item, onClose, onNext, onScan }) {
           </section>
 
           <div className="actions">
-            <button className="btn btn--primary" onClick={onScan}>Scan now</button>
+            <button className="btn btn--primary" onClick={onScan}>Scan a product</button>
             <button className="btn btn--ghost" onClick={onNext}>Next fact</button>
           </div>
         </div>
@@ -106,7 +106,7 @@ export function Decoder({ items, scannedText }) {
                 {seen && <span className="tag tag--seen">In your scans</span>}
               </summary>
               <dl className="decoder__body">
-                <div><dt>What it does</dt><dd>{item.function}</dd></div>
+                <div><dt>Why it’s there</dt><dd>{item.function}</dd></div>
                 <div><dt>Health</dt><dd>{item.health}</dd></div>
               </dl>
               <p className="decoder__source">

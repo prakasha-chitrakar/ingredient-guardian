@@ -1,0 +1,7 @@
+{
+  // Replaces the old "ingredient-guardian" Worker with a redirect to the new address.
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "ingredient-guardian",
+  "main": "index.js",
+  "compatibility_date": "2026-10-01"
+}

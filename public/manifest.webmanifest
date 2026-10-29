@@ -1,6 +1,6 @@
 {
-  "name": "Unpack",
-  "short_name": "Unpack",
+  "name": "Unlabel",
+  "short_name": "Unlabel",
   "description": "Scan any ingredient label and see what's safe for you.",
   "start_url": "/",
   "display": "standalone",

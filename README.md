@@ -1,8 +1,8 @@
-# Unpack
+# Unlabel
 
 Snap an ingredient label, see what's safe for you. React + Cloudflare Workers + free Workers AI (Llama 4 Scout).
 
-Live: https://ingredient-guardian.prakasha.workers.dev
+Live: https://unlabel.prakasha.workers.dev
 
 ## Run locally
 

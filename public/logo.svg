@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
-  <!-- Unpack mark, "Bubble flask": one soft flask shape with bubbles
+  <!-- Unlabel mark, "Bubble flask": one soft flask shape with bubbles
        cut through it, and an electron floating beside it. Single colour. -->
   <defs>
     <mask id="bubbles">

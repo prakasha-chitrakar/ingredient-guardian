@@ -86,11 +86,11 @@ function drawScaled(img, maxEdge, quality) {
   return canvas.toDataURL('image/jpeg', quality);
 }
 
-// Phone photos are often 5–10 MB. Shrinking to 1568px (the largest size Claude
-// uses without downscaling) keeps uploads fast and well inside Worker limits.
+// Phone photos are often 5–10 MB. 1280px keeps label text readable while making
+// the upload and the AI's image reading noticeably faster.
 export async function prepareImage(file) {
   const img = await loadImage(file);
-  const dataUrl = drawScaled(img, 1568, 0.85);
+  const dataUrl = drawScaled(img, 1280, 0.82);
   return {
     preview: dataUrl,
     base64: dataUrl.split(',')[1],

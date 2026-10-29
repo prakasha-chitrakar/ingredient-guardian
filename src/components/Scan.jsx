@@ -20,7 +20,7 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
   const [fact, setFact] = useState(() => Math.floor(Math.random() * discoveries.length));
   const captureRef = useRef(null);
   const abortRef = useRef(null);
-  const [productType, setProductType] = useState('Food');
+  const [productType, setProductType] = useState(profile.defaultType || 'Food');
   const [productName, setProductName] = useState('');
   const [ingredients, setIngredients] = useState('');
   const [image, setImage] = useState(null);

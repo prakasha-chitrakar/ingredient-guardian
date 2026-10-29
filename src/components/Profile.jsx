@@ -1,5 +1,6 @@
-import { Check, ChevronRight } from 'lucide-react';
+import { Check, ChevronRight, Trash2 } from 'lucide-react';
 import { Credit } from './About';
+import { PRODUCT_TYPES } from '../lib';
 
 const TYPES = ['Adult', 'Child', 'Baby', 'Pregnant', 'Elderly'];
 const GROUPS = [
@@ -17,7 +18,7 @@ function Chip({ label, active, onClick }) {
   );
 }
 
-export default function Profile({ profile, onChange, onAbout }) {
+export default function Profile({ profile, onChange, onAbout, onClearAll }) {
   const toggle = (field, value) => {
     const list = profile[field] || [];
     onChange({ ...profile, [field]: list.includes(value) ? list.filter(x => x !== value) : [...list, value] });
@@ -43,6 +44,27 @@ export default function Profile({ profile, onChange, onAbout }) {
           </div>
         </section>
       ))}
+
+      <section className="group">
+        <h2 className="h3">What do you scan most?</h2>
+        <p className="group__hint">Pre-selected on every scan. You can still change it.</p>
+        <select
+          className="input input--white"
+          value={profile.defaultType || 'Food'}
+          onChange={e => onChange({ ...profile, defaultType: e.target.value })}
+          aria-label="Default product type"
+        >
+          {PRODUCT_TYPES.map(t => <option key={t}>{t}</option>)}
+        </select>
+      </section>
+
+      <section className="group">
+        <h2 className="h3">Your data</h2>
+        <p className="group__hint">Your profile and checks live only on this phone.</p>
+        <button className="btn btn--danger btn--block" onClick={onClearAll}>
+          <Trash2 size={18} /> Clear all my data
+        </button>
+      </section>
 
       <button className="nudge" onClick={onAbout}>
         <span><b>About this app</b></span>

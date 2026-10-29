@@ -42,6 +42,14 @@ export default function App() {
     setPage('scan');
   };
 
+  const clearAll = () => {
+    if (!window.confirm('Delete your profile and all checks from this phone? This can’t be undone.')) return;
+    setHistory([]);
+    setProfile(DEFAULT_PROFILE);
+    setResult(null);
+    setPage('home');
+  };
+
   const deleteCheck = (index) => setHistory(prev => prev.filter((_, i) => i !== index));
   const restoreCheck = (item, index) => setHistory(prev => [...prev.slice(0, index), item, ...prev.slice(index)]);
 
@@ -81,7 +89,7 @@ export default function App() {
         {page === 'scan' && <Scan key={scanMode} profile={profile} onResult={handleResult} initialMode={scanMode} />}
         {page === 'compare' && <Compare history={history} onBack={() => setPage('home')} />}
         {page === 'results' && <Results result={result} onScanAgain={() => scan('photo')} onBack={() => setPage('home')} />}
-        {page === 'profile' && <Profile profile={profile} onChange={setProfile} onAbout={() => setPage('about')} />}
+        {page === 'profile' && <Profile profile={profile} onChange={setProfile} onAbout={() => setPage('about')} onClearAll={clearAll} />}
       </main>
       <Nav current={page} onNavigate={setPage} />
     </>

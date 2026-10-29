@@ -12,5 +12,7 @@
   },
   // Free Cloudflare Workers AI, used for the ingredient analysis by default.
   "ai": { "binding": "AI" },
+  // Remembers finished checks so an identical label comes back instantly.
+  "kv_namespaces": [{ "binding": "ANSWERS", "id": "975e9ccc342541d2b27052cecd6d2b16" }],
   "observability": { "enabled": true }
 }

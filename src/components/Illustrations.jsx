@@ -1,16 +1,17 @@
 // Flat, drawn visuals for discovery cards. No brand marks or product photos.
 
+// Backdrops use the brand palette: Mandys Pink, Botticelli and Pine Glade.
 const BG = {
-  can: '#fff0e8',
-  noodles: '#fff6e0',
-  chips: '#fff6e0',
-  apple: '#e9f8ee',
-  bread: '#f8efe4',
-  carton: '#fff0e8',
-  bottle: '#f5ecfb',
-  tube: '#e8f6fc',
-  dryer: '#f5ecfb',
-  pills: '#e9f8ee',
+  can: '#efb6a2',
+  noodles: '#bcc590',
+  chips: '#c5d7e3',
+  apple: '#c5d7e3',
+  bread: '#efb6a2',
+  carton: '#bcc590',
+  bottle: '#c5d7e3',
+  tube: '#efb6a2',
+  dryer: '#bcc590',
+  pills: '#efb6a2',
 };
 
 function Can() {

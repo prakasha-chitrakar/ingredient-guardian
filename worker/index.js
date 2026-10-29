@@ -8,7 +8,11 @@
 
 import Anthropic from '@anthropic-ai/sdk';
 
-const WORKERS_AI_MODEL = '@cf/meta/llama-4-scout-17b-16e-instruct';
+// Photos need a model that can see; typed lists use a much faster text model
+// (measured: ~5 s vs ~20 s, same allergen catches on our test labels).
+const VISION_MODEL = '@cf/meta/llama-4-scout-17b-16e-instruct';
+const TEXT_MODEL = '@cf/meta/llama-3.1-8b-instruct-fast';
+const CACHE_TTL = 60 * 60 * 24 * 30; // remember identical checks for 30 days
 const CLAUDE_MODEL = 'claude-haiku-5-5';
 
 const PRODUCT_TYPES = ['Food', 'Beverage', 'Condiment', 'Cosmetic/Skincare', 'Hair Care', 'Makeup', 'Medicine', 'Vitamin/Supplement', 'Baby Product', 'Household Product'];
@@ -22,27 +26,25 @@ const IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const MAX_IMAGE_BASE64 = 5_000_000; // the app shrinks photos to well under this
 const MAX_INGREDIENTS_CHARS = 6000;
 
+// Kept deliberately small: every extra field per ingredient adds output tokens,
+// and output length is most of the wait.
 const SCHEMA = `{
   "productName": "string (inferred or provided)",
-  "productType": "string",
   "overallScore": number (0-100, higher is safer),
   "scoreLabel": "Excellent|Good|Moderate Risk|Avoid",
   "summary": "one short plain sentence, max 12 words",
-  "alerts": ["max 8 words, only if it matters for this user's profile", ...],
+  "alerts": ["max 8 words, only if it matters for this user's profile"],
   "ingredients": [
     {
       "name": "ingredient name",
       "status": "safe|caution|allergen|harmful|carcinogen",
       "purpose": "2-4 words",
-      "riskLevel": "Safe|Low Risk|Moderate Risk|High Risk",
-      "tags": ["Allergen|Irritant|Carcinogenic|Hormone Disruptor|Neurotoxin|Environmental Hazard|Pregnancy Warning|Child Safety Concern"],
-      "concerns": ["max 8 words each, at most 2; empty if none"],
-      "ageSuitability": { "infants": "Safe|Caution|Avoid", "children": "Safe|Caution|Avoid", "adults": "Safe|Caution|Avoid", "seniors": "Safe|Caution|Avoid", "pregnant": "Safe|Caution|Avoid" },
+      "tags": ["only if relevant: Allergen|Irritant|Carcinogenic|Hormone Disruptor|Neurotoxin|Pregnancy Warning|Child Safety Concern"],
+      "concerns": ["max 8 words each, at most 2; empty for safe ingredients"],
       "userRisk": "none|low|moderate|high"
     }
   ],
-  "ageSummary": { "infants": "max 8 words", "children": "max 8 words", "adults": "max 8 words", "seniors": "max 8 words" },
-  "counts": { "safe": n, "caution": n, "allergen": n, "harmful": n, "carcinogen": n }
+  "ageSummary": { "infants": "max 8 words", "children": "max 8 words", "adults": "max 8 words", "seniors": "max 8 words" }
 }`;
 
 class InputError extends Error {}
@@ -88,7 +90,7 @@ function readRequest(body) {
   return { productType, productName, profile, ingredients };
 }
 
-function buildPrompt({ productType, productName, profile, ingredients }) {
+export function buildPrompt({ productType, productName, profile, ingredients }) {
   const who = [
     `Scanning for: ${profile.type}`,
     profile.allergies.length && `Allergies: ${profile.allergies.join(', ')}`,
@@ -112,7 +114,7 @@ Return ONLY valid JSON (no markdown, no preamble) in exactly this structure:
 ${SCHEMA}`;
 }
 
-function extractJson(text) {
+export function extractJson(text) {
   const start = text.indexOf('{');
   const end = text.lastIndexOf('}');
   if (start === -1 || end <= start) throw new UserFacingError('The analysis came back in an unexpected format. Try again.', 502);
@@ -134,7 +136,7 @@ async function askWorkersAI(env, input) {
 
   let out;
   try {
-    out = await env.AI.run(WORKERS_AI_MODEL, {
+    out = await env.AI.run(input.image ? VISION_MODEL : TEXT_MODEL, {
       messages: [{ role: 'user', content }],
       max_tokens: 4096,
       temperature: 0.2,
@@ -185,7 +187,25 @@ async function askClaude(env, input) {
   return extractJson(message.content.filter(b => b.type === 'text').map(b => b.text).join(''));
 }
 
-async function analyze(request, env) {
+// Same label + same profile + same AI → same key. Text is normalised so spacing and
+// capitalisation don't matter; photos are keyed by a hash of their bytes.
+async function cacheKey(input, env) {
+  const digest = async (s) => {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+    return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+  };
+  const { image, ingredients, ...rest } = input;
+  const body = {
+    v: 2,
+    provider: env.AI_PROVIDER === 'claude' ? CLAUDE_MODEL : image ? VISION_MODEL : TEXT_MODEL,
+    ...rest,
+    ingredients: ingredients?.toLowerCase().replace(/\s+/g, ' ').trim(),
+    image: image ? await digest(image.data) : null,
+  };
+  return `check:${await digest(JSON.stringify(body))}`;
+}
+
+async function analyze(request, env, ctx) {
   if (request.method !== 'POST') return Response.json({ error: 'Method not allowed' }, { status: 405 });
 
   let input;
@@ -196,8 +216,18 @@ async function analyze(request, env) {
     return Response.json({ error: message }, { status: 400 });
   }
 
+  const key = env.ANSWERS ? await cacheKey(input, env) : null;
+  if (key) {
+    const cached = await env.ANSWERS.get(key, 'json').catch(() => null);
+    if (cached) return Response.json({ ...cached, cached: true });
+  }
+
   try {
     const result = env.AI_PROVIDER === 'claude' ? await askClaude(env, input) : await askWorkersAI(env, input);
+    result.productType = input.productType;
+    if (key && Array.isArray(result.ingredients) && result.ingredients.length) {
+      ctx.waitUntil(env.ANSWERS.put(key, JSON.stringify(result), { expirationTtl: CACHE_TTL }).catch(() => {}));
+    }
     return Response.json(result);
   } catch (e) {
     if (e instanceof UserFacingError) return Response.json({ error: e.message }, { status: e.status });
@@ -207,9 +237,9 @@ async function analyze(request, env) {
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
-    if (url.pathname === '/api/analyze') return analyze(request, env);
+    if (url.pathname === '/api/analyze') return analyze(request, env, ctx);
     return Response.json({ error: 'Not found' }, { status: 404 });
   },
 };

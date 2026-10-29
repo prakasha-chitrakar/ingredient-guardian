@@ -1,11 +1,15 @@
 // Cloudflare Worker: serves /api/analyze. Everything else is the static React app.
-// The Anthropic key lives in the ANTHROPIC_API_KEY secret and never reaches the browser.
 // The browser only sends product details; the prompt and model are fixed here,
-// so nobody can use this endpoint as a free proxy to the Anthropic API.
+// so nobody can use this endpoint to run their own prompts on your account.
+//
+// AI provider:
+//   default  → Cloudflare Workers AI (free daily allowance, no API key needed)
+//   AI_PROVIDER=claude → Claude Haiku 5.5 (needs the ANTHROPIC_API_KEY secret and Anthropic credit)
 
 import Anthropic from '@anthropic-ai/sdk';
 
-const MODEL = 'claude-haiku-5-5';
+const WORKERS_AI_MODEL = '@cf/meta/llama-4-scout-17b-16e-instruct';
+const CLAUDE_MODEL = 'claude-haiku-5-5';
 
 const PRODUCT_TYPES = ['Food', 'Beverage', 'Condiment', 'Cosmetic/Skincare', 'Makeup', 'Medicine', 'Vitamin/Supplement', 'Baby Product', 'Household Product'];
 const PROFILE = {
@@ -42,6 +46,14 @@ const SCHEMA = `{
 }`;
 
 class InputError extends Error {}
+
+// An error whose message is safe and useful to show in the app.
+class UserFacingError extends Error {
+  constructor(message, status) {
+    super(message);
+    this.status = status;
+  }
+}
 
 function pickString(value, max) {
   return typeof value === 'string' ? value.trim().slice(0, max) : '';
@@ -103,8 +115,74 @@ ${SCHEMA}`;
 function extractJson(text) {
   const start = text.indexOf('{');
   const end = text.lastIndexOf('}');
-  if (start === -1 || end <= start) throw new Error('The analysis came back in an unexpected format.');
-  return JSON.parse(text.slice(start, end + 1));
+  if (start === -1 || end <= start) throw new UserFacingError('The analysis came back in an unexpected format. Try again.', 502);
+  try {
+    return JSON.parse(text.slice(start, end + 1));
+  } catch {
+    throw new UserFacingError('The analysis came back in an unexpected format. Try again.', 502);
+  }
+}
+
+async function askWorkersAI(env, input) {
+  const prompt = buildPrompt(input);
+  const content = input.image
+    ? [
+        { type: 'text', text: prompt },
+        { type: 'image_url', image_url: { url: `data:${input.image.mediaType};base64,${input.image.data}` } },
+      ]
+    : prompt;
+
+  let out;
+  try {
+    out = await env.AI.run(WORKERS_AI_MODEL, {
+      messages: [{ role: 'user', content }],
+      max_tokens: 4096,
+      temperature: 0.2,
+    });
+  } catch (e) {
+    console.error('Workers AI failed', e);
+    if (/daily free allocation|neurons|4006/i.test(e.message)) {
+      throw new UserFacingError('Daily free limit reached. Try again tomorrow.', 429);
+    }
+    throw new UserFacingError('The AI service is busy. Try again.', 502);
+  }
+
+  // Some models return the JSON already parsed.
+  if (out?.response && typeof out.response === 'object') return out.response;
+  return extractJson(String(out?.response ?? ''));
+}
+
+async function askClaude(env, input) {
+  if (!env.ANTHROPIC_API_KEY) throw new UserFacingError('ANTHROPIC_API_KEY is not set on the server.', 500);
+
+  const content = input.image
+    ? [
+        { type: 'image', source: { type: 'base64', media_type: input.image.mediaType, data: input.image.data } },
+        { type: 'text', text: buildPrompt(input) },
+      ]
+    : buildPrompt(input);
+
+  const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
+
+  let message;
+  try {
+    message = await client.messages.create({
+      model: CLAUDE_MODEL,
+      max_tokens: 16000,
+      thinking: { type: 'disabled' },
+      messages: [{ role: 'user', content }],
+    });
+  } catch (e) {
+    if (e instanceof Anthropic.RateLimitError) throw new UserFacingError('Too many checks right now. Try again in a minute.', 429);
+    if (e instanceof Anthropic.AuthenticationError) throw new UserFacingError('The server API key is invalid.', 500);
+    if (e instanceof Anthropic.APIError) throw new UserFacingError(`Anthropic API error (${e.status}): ${e.message}`, 502);
+    throw e;
+  }
+
+  if (message.stop_reason === 'refusal') throw new UserFacingError('This product could not be analyzed. Try a clearer ingredient list.', 422);
+  if (message.stop_reason === 'max_tokens') throw new UserFacingError('The ingredient list is too long. Try a shorter list.', 422);
+
+  return extractJson(message.content.filter(b => b.type === 'text').map(b => b.text).join(''));
 }
 
 async function analyze(request, env) {
@@ -118,47 +196,13 @@ async function analyze(request, env) {
     return Response.json({ error: message }, { status: 400 });
   }
 
-  if (!env.ANTHROPIC_API_KEY) return Response.json({ error: 'ANTHROPIC_API_KEY is not set on the server.' }, { status: 500 });
-
-  const content = input.image
-    ? [
-        { type: 'image', source: { type: 'base64', media_type: input.image.mediaType, data: input.image.data } },
-        { type: 'text', text: buildPrompt(input) },
-      ]
-    : buildPrompt(input);
-
-  const client = new Anthropic({ apiKey: env.ANTHROPIC_API_KEY });
-
   try {
-    const message = await client.messages.create({
-      model: MODEL,
-      max_tokens: 16000,
-      thinking: { type: 'disabled' },
-      messages: [{ role: 'user', content }],
-    });
-
-    if (message.stop_reason === 'refusal') {
-      return Response.json({ error: 'This product could not be analyzed. Try a clearer ingredient list.' }, { status: 422 });
-    }
-    if (message.stop_reason === 'max_tokens') {
-      return Response.json({ error: 'The ingredient list is too long to analyze in one go. Try a shorter list.' }, { status: 422 });
-    }
-
-    const text = message.content.filter(b => b.type === 'text').map(b => b.text).join('');
-    const result = extractJson(text);
+    const result = env.AI_PROVIDER === 'claude' ? await askClaude(env, input) : await askWorkersAI(env, input);
     return Response.json(result);
   } catch (e) {
-    if (e instanceof Anthropic.RateLimitError) {
-      return Response.json({ error: 'Too many checks right now. Wait a minute and try again.' }, { status: 429 });
-    }
-    if (e instanceof Anthropic.AuthenticationError) {
-      return Response.json({ error: 'The server API key is invalid.' }, { status: 500 });
-    }
-    if (e instanceof Anthropic.APIError) {
-      return Response.json({ error: `Anthropic API error (${e.status}): ${e.message}` }, { status: 502 });
-    }
+    if (e instanceof UserFacingError) return Response.json({ error: e.message }, { status: e.status });
     console.error('analyze failed', e);
-    return Response.json({ error: e.message || 'Analysis failed.' }, { status: 500 });
+    return Response.json({ error: 'Analysis failed. Try again.' }, { status: 500 });
   }
 }
 

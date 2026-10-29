@@ -10,5 +10,7 @@
     "not_found_handling": "single-page-application",
     "run_worker_first": ["/api/*"]
   },
+  // Free Cloudflare Workers AI, used for the ingredient analysis by default.
+  "ai": { "binding": "AI" },
   "observability": { "enabled": true }
 }

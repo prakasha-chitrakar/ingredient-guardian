@@ -1,25 +1,34 @@
 # Ingredient Guardian
 
-Snap an ingredient label, see what's safe for you. React + Cloudflare Workers + Claude Haiku 5.5.
+Snap an ingredient label, see what's safe for you. React + Cloudflare Workers + free Workers AI (Llama 4 Scout).
+
+Live: https://ingredient-guardian.prakasha.workers.dev
 
 ## Run locally
 
 ```bash
 npm install
-cp .dev.vars.example .dev.vars   # add your ANTHROPIC_API_KEY
+npx wrangler login   # Workers AI runs on your Cloudflare account, even locally
 npm run dev
 ```
 
 ## Deploy (Cloudflare free plan)
 
-1. Cloudflare dashboard → **Workers & Pages → Create → Import a repository** → this repo.
-2. Build command `npm run build`, deploy command `npx wrangler deploy`.
-3. **Settings → Variables and Secrets** → add secret `ANTHROPIC_API_KEY`, then redeploy.
+```bash
+npm run deploy
+```
 
-Pushes to `main` go live; other branches get a preview URL.
+Or connect the repo in the dashboard (**Settings → Build**): build `npm run build`, deploy `npx wrangler deploy`.
+
+## Switch to Claude (optional, better answers)
+
+Add credit at console.anthropic.com, then in **Settings → Variables and Secrets** add:
+- secret `ANTHROPIC_API_KEY`
+- text variable `AI_PROVIDER` = `claude`
 
 ## Notes
 
-- The API key stays on Cloudflare. The Worker fixes the prompt and model, so the endpoint can't be misused.
+- The Worker fixes the prompt and model, so the endpoint can't be misused.
+- Workers AI free plan: a daily allowance, plenty for personal use.
 - Profile and history are saved on the phone only.
 - AI can be wrong. Not medical advice.

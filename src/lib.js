@@ -81,6 +81,39 @@ export async function prepareImage(file) {
   };
 }
 
+// Lowercased product name + ingredient names, for matching against content terms.
+export function scanText(result) {
+  return [result.productName, ...(result.ingredients || []).map(i => i.name)].filter(Boolean).join(' ').toLowerCase();
+}
+
+const DAY = Math.floor(Date.now() / 86_400_000);
+
+// Today's fact. Prefers facts linked to recent scans, then to the user's health
+// conditions; otherwise rotates daily. `offset` lets the user page to the next fact.
+export function pickDiscovery(items, history, profile, offset = 0) {
+  if (!items.length) return null;
+
+  const linked = [];
+  for (const scan of history.slice(0, 5)) {
+    const text = scanText(scan);
+    for (const item of items) {
+      if (!linked.some(l => l.item.id === item.id) && item.matchTerms.some(t => text.includes(t))) linked.push({ item, scan });
+    }
+  }
+
+  const wanted = [
+    profile.medical?.includes('Diabetes') && 'sugar',
+    profile.medical?.includes('High Blood Pressure') && 'sodium',
+  ].filter(Boolean);
+  const forProfile = items.filter(i => i.tags.some(t => wanted.includes(t)) && !linked.some(l => l.item.id === i.id)).map(item => ({ item }));
+  const rest = items.filter(i => !linked.some(l => l.item.id === i.id) && !forProfile.some(p => p.item.id === i.id)).map(item => ({ item }));
+
+  // Personal picks first, the rest in daily rotation.
+  const rotated = rest.map((_, i) => rest[(i + DAY) % rest.length]);
+  const ordered = [...linked, ...forProfile, ...rotated];
+  return ordered[(offset % ordered.length + ordered.length) % ordered.length];
+}
+
 export function timeAgo(iso) {
   const diff = (Date.now() - new Date(iso)) / 1000;
   if (diff < 60) return 'Just now';

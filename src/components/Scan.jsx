@@ -1,11 +1,14 @@
-import { useEffect, useRef, useState } from 'react';
-import { Camera, Keyboard, LoaderCircle, TriangleAlert, X } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Camera, ImageUp, Keyboard, LoaderCircle, TriangleAlert, X } from 'lucide-react';
+import CameraView from './Camera';
 import { PRODUCT_TYPES, prepareImage } from '../lib';
 
 const STEPS = ['Reading…', 'Checking…', 'Almost done…'];
 
-export default function Scan({ profile, onResult }) {
-  const [mode, setMode] = useState('photo');
+export default function Scan({ profile, onResult, initialMode = 'photo' }) {
+  const [mode, setMode] = useState(initialMode);
+  const [cameraOpen, setCameraOpen] = useState(false);
+  const captureRef = useRef(null);
   const [productType, setProductType] = useState('Food');
   const [productName, setProductName] = useState('');
   const [ingredients, setIngredients] = useState('');
@@ -31,6 +34,12 @@ export default function Scan({ profile, onResult }) {
       setError(e.message);
     }
   };
+
+  // No live camera (old browser, desktop without webcam): use the phone's own camera app.
+  const cameraUnavailable = useCallback(() => {
+    setCameraOpen(false);
+    captureRef.current?.click();
+  }, []);
 
   const analyze = async () => {
     if (mode === 'text' && !ingredients.trim()) { setError('Add ingredients first.'); return; }
@@ -83,16 +92,18 @@ export default function Scan({ profile, onResult }) {
             <button className="photo__remove" onClick={() => setImage(null)} aria-label="Remove photo"><X size={16} /></button>
           </div>
         ) : (
-          <button
+          <div
             className="drop"
-            onClick={() => fileRef.current?.click()}
             onDragOver={e => e.preventDefault()}
             onDrop={e => { e.preventDefault(); pickFile(e.dataTransfer.files[0]); }}
           >
-            <span className="drop__icon"><Camera size={28} strokeWidth={2} /></span>
             <span className="drop__title">Snap the label</span>
             <span className="drop__hint">Whole list, good light.</span>
-          </button>
+            <div className="drop__actions">
+              <button className="btn btn--primary" onClick={() => setCameraOpen(true)}><Camera size={18} /> Take photo</button>
+              <button className="btn btn--ghost" onClick={() => fileRef.current?.click()}><ImageUp size={18} /> Gallery</button>
+            </div>
+          </div>
         )
       ) : (
         <label className="field">
@@ -107,6 +118,14 @@ export default function Scan({ profile, onResult }) {
         </label>
       )}
       <input ref={fileRef} type="file" accept="image/*" hidden onChange={e => { pickFile(e.target.files[0]); e.target.value = ''; }} />
+      <input ref={captureRef} type="file" accept="image/*" capture="environment" hidden onChange={e => { pickFile(e.target.files[0]); e.target.value = ''; }} />
+      {cameraOpen && (
+        <CameraView
+          onCapture={file => { setCameraOpen(false); pickFile(file); }}
+          onClose={() => setCameraOpen(false)}
+          onUnavailable={cameraUnavailable}
+        />
+      )}
 
       <div className="field-row">
         <label className="field">

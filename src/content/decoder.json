@@ -1,0 +1,46 @@
+[
+  {
+    "id": "maltodextrin",
+    "question": "What does maltodextrin do?",
+    "matchTerms": ["maltodextrin"],
+    "function": "A carbohydrate powder made by breaking down corn, potato or rice starch. It adds body and bulk, and carries flavours in snacks and drink mixes.",
+    "health": "It counts as carbohydrate, like other starches. U.S. regulators list it as generally recognised as safe.",
+    "sources": [
+      { "title": "21 CFR 184.1444 Maltodextrin", "publisher": "U.S. Code of Federal Regulations", "url": "https://www.law.cornell.edu/cfr/text/21/184.1444" }
+    ],
+    "verified": "2026-10-29"
+  },
+  {
+    "id": "acidity-regulators",
+    "question": "Why do drinks contain acidity regulators?",
+    "matchTerms": ["citric acid", "acidity regulator", "e330", "lactic acid", "sodium citrate", "e331"],
+    "function": "They control how acidic a food is. That shapes taste and helps stop spoilage. Citric acid is a common one.",
+    "health": "Their job is technical, not nutritional. An acid-sounding name doesn’t make it harmful.",
+    "sources": [
+      { "title": "Types of Food Ingredients", "publisher": "U.S. Food & Drug Administration", "url": "https://www.fda.gov/food/food-additives-and-gras-ingredients-information-consumers/types-food-ingredients" }
+    ],
+    "verified": "2026-10-29"
+  },
+  {
+    "id": "added-vs-natural-sugar",
+    "question": "Added sugar vs natural sugar?",
+    "matchTerms": ["sugar", "syrup", "concentrate", "honey", "dextrose", "glucose", "fructose"],
+    "function": "WHO groups “free sugars”: sugar added by makers or cooks, plus sugar in honey, syrups, juice and concentrates.",
+    "health": "WHO advises keeping free sugars under 10% of daily energy. Sugar inside whole fruit, vegetables and milk isn’t counted.",
+    "sources": [
+      { "title": "WHO calls on countries to reduce sugars intake among adults and children", "publisher": "World Health Organization, 2015", "url": "https://www.who.int/news/item/04-03-2015-who-calls-on-countries-to-reduce-sugars-intake-among-adults-and-children" }
+    ],
+    "verified": "2026-10-29"
+  },
+  {
+    "id": "preservatives",
+    "question": "Why do packaged foods have preservatives?",
+    "matchTerms": ["preservative", "sodium benzoate", "e211", "potassium sorbate", "e202", "tbhq", "e319", "sodium metabisulphite"],
+    "function": "They stop bacteria, moulds and yeast from spoiling food, and slow changes in colour, flavour and texture.",
+    "health": "Food regulators review them before use. If you react to a specific one, check for its name or E-number.",
+    "sources": [
+      { "title": "Types of Food Ingredients", "publisher": "U.S. Food & Drug Administration", "url": "https://www.fda.gov/food/food-additives-and-gras-ingredients-information-consumers/types-food-ingredients" }
+    ],
+    "verified": "2026-10-29"
+  }
+]

@@ -1,6 +1,6 @@
 {
-  "name": "Ingredient Guardian",
-  "short_name": "Guardian",
+  "name": "Unpack",
+  "short_name": "Unpack",
   "description": "Scan any ingredient label and see what's safe for you.",
   "start_url": "/",
   "display": "standalone",

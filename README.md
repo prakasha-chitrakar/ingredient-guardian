@@ -1,4 +1,4 @@
-# Ingredient Guardian
+# Unpack
 
 Snap an ingredient label, see what's safe for you. React + Cloudflare Workers + free Workers AI (Llama 4 Scout).
 

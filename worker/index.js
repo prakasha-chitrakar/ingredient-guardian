@@ -189,7 +189,7 @@ async function askClaude(env, input) {
 
 // ---------- Barcode lookup (Open Food Facts, then Open Beauty Facts) ----------
 
-const LOOKUP_UA = 'IngredientGuardian/2.0 (https://ingredient-guardian.prakasha.workers.dev)';
+const LOOKUP_UA = 'Unpack/2.0 (https://ingredient-guardian.prakasha.workers.dev)';
 const LOOKUP_FIELDS = 'code,product_name,brands,ingredients_text,ingredients_text_en,categories_tags,image_front_small_url';
 const DATABASES = [
   { host: 'world.openfoodfacts.org', source: 'Open Food Facts' },

@@ -1,4 +1,4 @@
-/* Ingredient Guardian design system.
+/* Unpack design system.
    Palette: Mandys Pink, Botticelli (primary), Pine Glade, Cabbage Pont (secondary).
    The pastels are surfaces and highlights; Cabbage Pont carries actions and contrast.
    Type: Nunito Sans for structure, Instrument Serif italic for accent phrases.
@@ -95,7 +95,7 @@ ul { list-style: none; }
 
 .brand {
   display: flex; align-items: center; gap: 10px;
-  font-weight: 800; font-size: 18px; line-height: 1.2;
+  font-weight: 800; font-size: 21px; line-height: 1.2; letter-spacing: -0.02em;
 }
 .brand__mark { width: 34px; height: 34px; display: block; flex-shrink: 0; }
 
@@ -518,7 +518,7 @@ textarea.input { resize: vertical; }
 @keyframes hero-in { from { transform: scale(1.04); opacity: 0; } }
 .landing__hero-top { position: absolute; top: 24px; left: 24px; right: 24px; display: flex; }
 .landing__pill { padding: 8px 14px 8px 8px; border-radius: 999px; }
-.landing__pill .brand { font-size: 15px; }
+.landing__pill .brand { font-size: 18px; }
 .landing__pill .brand__mark { width: 30px; height: 30px; }
 .landing__hero-card {
   position: relative; margin: -140px 12px 0; padding: 24px 22px 22px;

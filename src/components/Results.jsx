@@ -98,7 +98,7 @@ export default function Results({ result, onScanAgain, onBack }) {
     const text = [
       `${productName || 'Product'}: ${overallScore}/100, ${scoreLabel}.`,
       watch && `Watch: ${watch}.`,
-      `Checked with Ingredient Guardian: ${window.location.origin}`,
+      `Checked with Unpack: ${window.location.origin}`,
     ].filter(Boolean).join('\n');
     try {
       if (navigator.share) {

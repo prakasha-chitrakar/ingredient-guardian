@@ -10,10 +10,10 @@
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="preload" as="image" href="/img/hero.webp" type="image/webp" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="Guardian" />
+    <meta name="apple-mobile-web-app-title" content="Unpack" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="description" content="Ingredient Guardian: check any ingredient label for allergens and risky ingredients." />
-    <title>Ingredient Guardian</title>
+    <meta name="description" content="Unpack: snap any ingredient label and see what it’s hiding, and what it means for you." />
+    <title>Unpack</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Nunito+Sans:opsz,wght@6..12,500..800&display=swap" rel="stylesheet" />
@@ -32,7 +32,7 @@
       #splash::before { width: 70vmax; height: 70vmax; left: -30vmax; top: -30vmax; background: #efb6a2; }
       #splash::after { width: 60vmax; height: 60vmax; right: -30vmax; bottom: -30vmax; background: #c5d7e3; }
       #splash img { width: 132px; height: 132px; animation: splash-in 0.6s cubic-bezier(.2,.7,.2,1) both, float 3.2s ease-in-out 0.6s infinite; }
-      #splash .splash__name { font-weight: 800; font-size: 20px; letter-spacing: -0.01em; animation: splash-in 0.6s 0.1s cubic-bezier(.2,.7,.2,1) both; }
+      #splash .splash__name { font-weight: 800; font-size: 28px; letter-spacing: -0.03em; animation: splash-in 0.6s 0.1s cubic-bezier(.2,.7,.2,1) both; }
       #splash .splash__tag { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 18px; color: #3f4d34; opacity: 0.8; animation: splash-in 0.6s 0.2s cubic-bezier(.2,.7,.2,1) both; }
       #splash.is-done { opacity: 0; transform: scale(1.03); pointer-events: none; }
       @keyframes splash-in { from { opacity: 0; transform: translateY(8px); } }
@@ -41,10 +41,10 @@
     </style>
   </head>
   <body>
-    <noscript>Ingredient Guardian needs JavaScript turned on.</noscript>
+    <noscript>Unpack needs JavaScript turned on.</noscript>
     <div id="splash" aria-hidden="true">
       <img src="/logo-animated.svg" alt="" width="132" height="132" />
-      <p class="splash__name">Ingredient Guardian</p>
+      <p class="splash__name">Unpack</p>
       <p class="splash__tag">Reading the small print…</p>
     </div>
     <div id="root"></div>

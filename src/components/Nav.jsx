@@ -4,7 +4,7 @@ export function Brand() {
   return (
     <header className="brand">
       <img className="brand__mark" src="/logo.svg" alt="" width="32" height="32" />
-      Ingredient Guardian
+      Unpack
     </header>
   );
 }

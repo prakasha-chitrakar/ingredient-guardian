@@ -58,10 +58,20 @@ export default function App() {
     setPage('results');
   };
 
-  if (page === 'landing') return <Landing onStart={start} />;
+  const ambient = <div className="ambient" aria-hidden="true"><span /><span /><span /></div>;
+
+  if (page === 'landing') {
+    return (
+      <>
+        {ambient}
+        <Landing onStart={start} onBarcode={() => { save('ig.seenIntro', true); scan('barcode'); }} />
+      </>
+    );
+  }
 
   return (
     <>
+      {ambient}
       <main>
         {page === 'home' && (
           <Home

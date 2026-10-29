@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#ffffff" />
     <link rel="icon" href="/logo.svg" type="image/svg+xml" />
-    <link rel="preload" as="image" href="/logo-animated.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="preload" as="image" href="/img/hero.webp" type="image/webp" />
@@ -31,19 +30,67 @@
       }
       #splash::before { width: 70vmax; height: 70vmax; left: -30vmax; top: -30vmax; background: #efb6a2; }
       #splash::after { width: 60vmax; height: 60vmax; right: -30vmax; bottom: -30vmax; background: #c5d7e3; }
-      #splash img { width: 132px; height: 132px; animation: splash-in 0.6s cubic-bezier(.2,.7,.2,1) both, float 3.2s ease-in-out 0.6s infinite; }
+      #splash .splash__logo { width: 132px; height: auto; animation: splash-in 0.6s cubic-bezier(.2,.7,.2,1) both, float 3.2s ease-in-out 0.6s infinite; }
       #splash .splash__name { font-family: 'Nunito', 'Nunito Sans', system-ui, sans-serif; color: #3f4d34; font-weight: 900; font-size: 32px; letter-spacing: -0.02em; animation: splash-in 0.6s 0.1s cubic-bezier(.2,.7,.2,1) both; }
       #splash .splash__tag { font-family: 'Fraunces', Georgia, serif; font-style: italic; font-variation-settings: 'SOFT' 100; font-size: 18px; color: #3f4d34; opacity: 0.8; animation: splash-in 0.6s 0.2s cubic-bezier(.2,.7,.2,1) both; }
       #splash.is-done { opacity: 0; transform: scale(1.03); pointer-events: none; }
       @keyframes splash-in { from { opacity: 0; transform: translateY(8px); } }
       @keyframes float { 50% { transform: translateY(-5px); } }
-      @media (prefers-reduced-motion: reduce) { #splash img, #splash p { animation: none; } }
+      @media (prefers-reduced-motion: reduce) { #splash .splash__logo, #splash p { animation: none; } }
     </style>
   </head>
   <body>
     <noscript>Unlabel needs JavaScript turned on.</noscript>
     <div id="splash" aria-hidden="true">
-      <img src="/logo-animated.svg" alt="" width="132" height="132" />
+      <svg class="splash__logo" xmlns="http://www.w3.org/2000/svg" viewBox="-27 -40 234 274" width="132" height="154" aria-hidden="true">
+        <!-- Animated Unlabel mark for the loading screen: same drawing as logo.svg, plus
+             swaying leaves, a bobbing bubble, tiny bubbles drifting out of the neck and a
+             soft glow behind. -->
+        <style>
+          .halo { transform-origin: 90px 144px; animation: halo 3.2s ease-in-out infinite; }
+          .sprout { transform-origin: 57px 213px; animation: sway 3.2s ease-in-out infinite; }
+          .bubble { transform-origin: 119px 79px; animation: bob 2.4s ease-in-out infinite; }
+          .steam { animation: steam 2.8s ease-out infinite; opacity: 0; }
+          .steam.s2 { animation-delay: 0.9s; }
+          .steam.s3 { animation-delay: 1.8s; }
+          @keyframes halo { 0%, 100% { transform: scale(0.9); opacity: 0.35; } 50% { transform: scale(1.08); opacity: 0.6; } }
+          @keyframes sway { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(4deg); } }
+          @keyframes bob { 50% { transform: translateY(-5px) scale(1.08); } }
+          @keyframes steam {
+            0% { transform: translateY(0); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(-38px); opacity: 0; }
+          }
+          @media (prefers-reduced-motion: reduce) {
+            .halo, .sprout, .bubble, .steam { animation: none; }
+          }
+        </style>
+        <defs>
+          <mask id="splash-cutouts">
+            <rect x="-27" y="-40" width="234" height="274" fill="#fff"/>
+            <g class="sprout">
+              <g fill="#000" stroke="#000" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke-width="3" d="M66 196C60 150 95 108 143 99C145 140 115 185 66 196Z"/>
+                <path stroke-width="3" d="M59 182C40 178 28 160 29 132C48 138 60 155 59 182Z"/>
+                <path fill="none" stroke-width="10" d="M57 213Q60 199 69 187"/>
+              </g>
+              <path d="M70 190Q88 152 116 127" fill="none" stroke="#fff" stroke-width="6.5" stroke-linecap="round"/>
+            </g>
+            <circle class="bubble" cx="119" cy="79" r="9.5" fill="#000"/>
+          </mask>
+        </defs>
+        <circle class="halo" cx="90" cy="144" r="104" fill="#EFB6A2"/>
+        <g fill="#3F4D34" mask="url(#splash-cutouts)">
+          <rect x="42" y="0" width="98" height="15" rx="6"/>
+          <rect x="57" y="10" width="67" height="70"/>
+          <circle cx="90" cy="144" r="90"/>
+        </g>
+        <g fill="#3F4D34">
+          <circle class="steam" cx="84" cy="-6" r="5"/>
+          <circle class="steam s2" cx="98" cy="-4" r="3.5"/>
+          <circle class="steam s3" cx="90" cy="-8" r="2.8"/>
+        </g>
+      </svg>
       <p class="splash__name">Unlabel</p>
       <p class="splash__tag">Reading the small print…</p>
     </div>

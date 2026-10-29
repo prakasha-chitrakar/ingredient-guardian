@@ -26,13 +26,13 @@
       <rect x="-27" y="-40" width="234" height="274" fill="#fff"/>
       <g class="sprout">
         <g fill="#000" stroke="#000" stroke-linecap="round" stroke-linejoin="round">
-          <path stroke-width="1" d="M66 196C60 150 95 108 143 99C145 140 115 185 66 196Z"/>
-          <path stroke-width="1" d="M59 182C40 178 28 160 29 132C48 138 60 155 59 182Z"/>
-          <path fill="none" stroke-width="7" d="M57 213Q60 199 69 187"/>
+          <path stroke-width="3" d="M66 196C60 150 95 108 143 99C145 140 115 185 66 196Z"/>
+          <path stroke-width="3" d="M59 182C40 178 28 160 29 132C48 138 60 155 59 182Z"/>
+          <path fill="none" stroke-width="10" d="M57 213Q60 199 69 187"/>
         </g>
-        <path d="M70 190Q88 152 116 127" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round"/>
+        <path d="M70 190Q88 152 116 127" fill="none" stroke="#fff" stroke-width="6.5" stroke-linecap="round"/>
       </g>
-      <circle class="bubble" cx="119" cy="79" r="7.5" fill="#000"/>
+      <circle class="bubble" cx="119" cy="79" r="9.5" fill="#000"/>
     </mask>
   </defs>
   <circle class="halo" cx="90" cy="144" r="104" fill="#EFB6A2"/>

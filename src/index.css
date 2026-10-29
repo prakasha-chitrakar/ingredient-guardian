@@ -99,7 +99,7 @@ ul { list-style: none; }
   display: flex; align-items: center; gap: 10px;
   font-family: 'Nunito', var(--font); color: var(--accent); font-weight: 900; font-size: 23px; line-height: 1.2; letter-spacing: -0.02em;
 }
-.brand__mark { width: 30px; height: 30px; display: block; flex-shrink: 0; }
+.brand__mark { width: 36px; height: 36px; display: block; flex-shrink: 0; }
 
 .display { font-size: var(--text-display); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; }
 .h1 { font-size: var(--text-heading); font-weight: 800; line-height: 1.2; letter-spacing: -0.01em; }
@@ -523,7 +523,7 @@ textarea.input { resize: vertical; }
 .landing__hero-top { position: absolute; top: 24px; left: 24px; right: 24px; display: flex; }
 .landing__pill { padding: 8px 14px 8px 8px; border-radius: 999px; }
 .landing__pill .brand { font-size: 18px; }
-.landing__pill .brand__mark { width: 30px; height: 30px; }
+.landing__pill .brand__mark { width: 32px; height: 32px; }
 .landing__hero-card {
   position: relative; margin: -140px 12px 0; padding: 24px 22px 22px;
   border-radius: var(--radius);

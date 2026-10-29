@@ -1,4 +1,22 @@
-export const PRODUCT_TYPES = ['Food', 'Beverage', 'Condiment', 'Cosmetic/Skincare', 'Makeup', 'Medicine', 'Vitamin/Supplement', 'Baby Product', 'Household Product'];
+export const PRODUCT_TYPES = ['Food', 'Beverage', 'Condiment', 'Cosmetic/Skincare', 'Hair Care', 'Makeup', 'Medicine', 'Vitamin/Supplement', 'Baby Product', 'Household Product'];
+
+// Links to trusted sources so people can read up on an ingredient and decide for
+// themselves. Built from the ingredient name (never written by the AI), so they
+// always point at real search pages.
+export function readMoreLinks(ingredient) {
+  const name = ingredient.name.replace(/\(.*?\)/g, '').trim();
+  const q = encodeURIComponent(name);
+  const links = [
+    { label: 'Chemical safety', source: 'NIH PubChem', url: `https://pubchem.ncbi.nlm.nih.gov/#query=${q}` },
+    { label: 'Health information', source: 'MedlinePlus (NIH)', url: `https://vsearch.nlm.nih.gov/vivisimo/cgi-bin/query-meta?v%3Aproject=medlineplus&v%3Asources=medlineplus-bundle&query=${q}` },
+    { label: 'Research papers', source: 'Google Scholar', url: `https://scholar.google.com/scholar?q=${encodeURIComponent(`"${name}" health effects`)}` },
+  ];
+  const cancerTalk = [...(ingredient.tags || []), ...(ingredient.concerns || [])].join(' ');
+  if (ingredient.status === 'carcinogen' || /carcino|cancer|formaldehyde/i.test(cancerTalk)) {
+    links.unshift({ label: 'Cancer classifications', source: 'WHO IARC', url: 'https://monographs.iarc.who.int/agents-classified-by-the-iarc/' });
+  }
+  return links;
+}
 
 export const STATUS = {
   safe:       { label: 'Fine',                color: 'var(--safe)' },

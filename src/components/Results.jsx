@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { ArrowLeft, ChevronDown, CircleCheck, ScanLine, Share2, TriangleAlert } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, ChevronDown, CircleCheck, ScanLine, Share2, TriangleAlert } from 'lucide-react';
 import FactsPanel from './FactsPanel';
-import { STATUS, isFlagged } from '../lib';
+import { STATUS, isFlagged, readMoreLinks } from '../lib';
 
 const AGE_TONE = { Safe: 'var(--safe)', Caution: 'var(--caution)', Avoid: 'var(--harmful)' };
 const AGE_GROUPS = [
@@ -40,6 +40,22 @@ function IngredientRow({ ingredient }) {
           )}
           {ingredient.tags?.length > 0 && (
             <div className="tags">{ingredient.tags.map(t => <span key={t} className="tag">{t}</span>)}</div>
+          )}
+          {(ingredient.status !== 'safe' || ingredient.concerns?.length > 0) && (
+            <div className="readmore">
+              <p className="readmore__title">Read more and decide</p>
+              <ul>
+                {readMoreLinks(ingredient).map(l => (
+                  <li key={l.url}>
+                    <a href={l.url} target="_blank" rel="noreferrer">
+                      <span>{l.label}</span>
+                      <small>{l.source}</small>
+                      <ArrowUpRight size={16} />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
           {ingredient.ageSuitability && (
             <dl className="age-grid">
@@ -110,6 +126,12 @@ export default function Results({ result, onScanAgain, onBack }) {
             <li key={i} className="alert"><TriangleAlert size={18} /><p>{a}</p></li>
           ))}
         </ul>
+      )}
+
+      {ingredients.some(i => ['harmful', 'carcinogen'].includes(i.status)) && (
+        <p className="decide-note">
+          Some ingredients have health concerns. Tap one to read trusted sources and decide for yourself.
+        </p>
       )}
 
       <div className="seg" role="tablist" aria-label="Ingredient views">

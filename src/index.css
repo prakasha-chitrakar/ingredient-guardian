@@ -293,8 +293,8 @@ textarea.input { resize: vertical; }
 }
 .tag--you { background: var(--signal-red-orange); color: var(--paper-white); flex-shrink: 0; }
 
-.age-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.age-grid > div { display: flex; justify-content: space-between; padding: 8px 14px; background: var(--paper-white); border-radius: var(--radius); font-size: var(--text-caption); }
+.age-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+.age-grid > div { display: flex; justify-content: space-between; gap: 8px; padding: 8px 14px; background: var(--paper-white); border-radius: var(--radius); font-size: var(--text-caption); }
 .age-grid dt { text-transform: capitalize; color: var(--muted); }
 .age-grid dd { font-weight: 800; }
 
@@ -447,6 +447,19 @@ textarea.input { resize: vertical; }
 }
 .camera__shutter:disabled { opacity: 0.4; }
 .camera__blocked { max-width: 340px; padding: 24px; color: #fff; text-align: center; display: flex; flex-direction: column; gap: 12px; align-items: center; }
+
+/* Read more links on risky ingredients */
+.readmore { background: var(--paper-white); border-radius: 20px; padding: 14px 16px 6px; }
+.readmore__title { font-size: var(--text-tiny); font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ember-orange); margin-bottom: 4px; }
+.readmore li + li { border-top: 1px solid var(--fog); }
+.readmore a {
+  display: grid; grid-template-columns: 1fr auto; grid-template-rows: auto auto; column-gap: 8px;
+  padding: 10px 0; color: var(--graphite); text-decoration: none;
+}
+.readmore a span { font-weight: 700; font-size: var(--text-body-sm); line-height: 1.3; }
+.readmore a small { grid-column: 1; font-size: var(--text-tiny); color: var(--muted); }
+.readmore a svg { grid-column: 2; grid-row: 1 / span 2; align-self: center; color: var(--ember-orange); }
+.decide-note { font-size: var(--text-caption); line-height: 1.5; color: var(--muted); padding: 0 4px; margin-top: -8px; }
 
 /* Credits / About */
 .credit { text-align: center; font-size: var(--text-tiny); font-weight: 600; color: var(--muted); padding: 8px 0 4px; }

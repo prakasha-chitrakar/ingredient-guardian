@@ -11,7 +11,7 @@ import Anthropic from '@anthropic-ai/sdk';
 const WORKERS_AI_MODEL = '@cf/meta/llama-4-scout-17b-16e-instruct';
 const CLAUDE_MODEL = 'claude-haiku-5-5';
 
-const PRODUCT_TYPES = ['Food', 'Beverage', 'Condiment', 'Cosmetic/Skincare', 'Makeup', 'Medicine', 'Vitamin/Supplement', 'Baby Product', 'Household Product'];
+const PRODUCT_TYPES = ['Food', 'Beverage', 'Condiment', 'Cosmetic/Skincare', 'Hair Care', 'Makeup', 'Medicine', 'Vitamin/Supplement', 'Baby Product', 'Household Product'];
 const PROFILE = {
   type: ['Adult', 'Child', 'Baby', 'Pregnant', 'Elderly'],
   allergies: ['Nuts', 'Dairy', 'Soy', 'Gluten', 'Shellfish', 'Egg', 'Sesame', 'Fish'],

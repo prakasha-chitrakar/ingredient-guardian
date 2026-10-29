@@ -95,9 +95,9 @@ ul { list-style: none; }
 
 .brand {
   display: flex; align-items: center; gap: 10px;
-  font-weight: 800; font-size: 21px; line-height: 1.2; letter-spacing: -0.02em;
+  font-family: 'Nunito', var(--font); color: var(--accent); font-weight: 900; font-size: 23px; line-height: 1.2; letter-spacing: -0.02em;
 }
-.brand__mark { width: 34px; height: 34px; display: block; flex-shrink: 0; }
+.brand__mark { width: 30px; height: 30px; display: block; flex-shrink: 0; }
 
 .display { font-size: var(--text-display); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; }
 .h1 { font-size: var(--text-heading); font-weight: 800; line-height: 1.2; letter-spacing: -0.01em; }

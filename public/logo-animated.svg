@@ -1,38 +1,49 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
-  <!-- Animated "Bubble flask" for the loading screen: same drawing as logo.svg, plus
-       bubbles rising through the flask, a gentle breathing squish, a floating
-       electron and a soft glow. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-27 -40 234 274">
+  <!-- Animated Unlabel mark for the loading screen: same drawing as logo.svg, plus
+       swaying leaves, a bobbing bubble, tiny bubbles drifting out of the neck and a
+       soft glow behind. -->
   <style>
-    .halo { transform-origin: 60px 78px; animation: halo 3s ease-in-out infinite; }
-    .flask { transform-origin: 60px 105px; animation: breathe 3s ease-in-out infinite; }
-    .electron { animation: bob 3s ease-in-out infinite; }
-    .bubble { animation: rise 2.7s ease-in infinite; }
-    .bubble.b2 { animation-delay: 0.9s; }
-    .bubble.b3 { animation-delay: 1.8s; }
-    @keyframes halo { 0%, 100% { transform: scale(0.9); opacity: 0.35; } 50% { transform: scale(1.12); opacity: 0.65; } }
-    @keyframes breathe { 50% { transform: scale(1.025, 0.975); } }
-    @keyframes bob { 50% { transform: translate(-2px, -5px); } }
-    @keyframes rise {
-      0% { transform: translateY(8px); opacity: 0; }
+    .halo { transform-origin: 90px 144px; animation: halo 3.2s ease-in-out infinite; }
+    .sprout { transform-origin: 57px 213px; animation: sway 3.2s ease-in-out infinite; }
+    .bubble { transform-origin: 119px 79px; animation: bob 2.4s ease-in-out infinite; }
+    .steam { animation: steam 2.8s ease-out infinite; opacity: 0; }
+    .steam.s2 { animation-delay: 0.9s; }
+    .steam.s3 { animation-delay: 1.8s; }
+    @keyframes halo { 0%, 100% { transform: scale(0.9); opacity: 0.35; } 50% { transform: scale(1.08); opacity: 0.6; } }
+    @keyframes sway { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(4deg); } }
+    @keyframes bob { 50% { transform: translateY(-5px) scale(1.08); } }
+    @keyframes steam {
+      0% { transform: translateY(0); opacity: 0; }
       20% { opacity: 1; }
-      85% { opacity: 1; }
       100% { transform: translateY(-38px); opacity: 0; }
     }
     @media (prefers-reduced-motion: reduce) {
-      .halo, .flask, .electron, .bubble { animation: none; }
+      .halo, .sprout, .bubble, .steam { animation: none; }
     }
   </style>
   <defs>
-    <mask id="bubbles">
-      <rect width="120" height="120" fill="#fff"/>
-      <circle class="bubble" cx="52" cy="88" r="6" fill="#000"/>
-      <circle class="bubble b2" cx="66" cy="84" r="4.5" fill="#000"/>
-      <circle class="bubble b3" cx="58" cy="90" r="3.5" fill="#000"/>
+    <mask id="cutouts">
+      <rect x="-27" y="-40" width="234" height="274" fill="#fff"/>
+      <g class="sprout">
+        <g fill="#000" stroke="#000" stroke-linecap="round" stroke-linejoin="round">
+          <path stroke-width="1" d="M66 196C60 150 95 108 143 99C145 140 115 185 66 196Z"/>
+          <path stroke-width="1" d="M59 182C40 178 28 160 29 132C48 138 60 155 59 182Z"/>
+          <path fill="none" stroke-width="7" d="M57 213Q60 199 69 187"/>
+        </g>
+        <path d="M70 190Q88 152 116 127" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round"/>
+      </g>
+      <circle class="bubble" cx="119" cy="79" r="7.5" fill="#000"/>
     </mask>
   </defs>
-  <circle class="halo" cx="60" cy="78" r="34" fill="#EFB6A2"/>
-  <g class="flask">
-    <path fill="#3F4D34" mask="url(#bubbles)" d="M48.5 15H71.5A6.5 6.5 0 0 1 71.5 28H69V49Q69 53 73 54.3A27 27 0 1 1 47 54.3Q51 53 51 49V28H48.5A6.5 6.5 0 0 1 48.5 15Z"/>
+  <circle class="halo" cx="90" cy="144" r="104" fill="#EFB6A2"/>
+  <g fill="#3F4D34" mask="url(#cutouts)">
+    <rect x="42" y="0" width="98" height="15" rx="6"/>
+    <rect x="57" y="10" width="67" height="70"/>
+    <circle cx="90" cy="144" r="90"/>
   </g>
-  <circle class="electron" cx="93" cy="50" r="8" fill="#3F4D34"/>
+  <g fill="#3F4D34">
+    <circle class="steam" cx="84" cy="-6" r="5"/>
+    <circle class="steam s2" cx="98" cy="-4" r="3.5"/>
+    <circle class="steam s3" cx="90" cy="-8" r="2.8"/>
+  </g>
 </svg>

@@ -1,17 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
-  <!-- Unlabel mark, "Bubble flask": one soft flask shape with bubbles
-       cut through it, and an electron floating beside it. Single colour. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-27 0 234 234">
+  <!-- Unlabel mark: a round flask with a sprouting leaf and a bubble cut through it.
+       Traced from design/unlabel-logo-reference.png. Single colour. -->
   <defs>
-    <mask id="bubbles">
-      <rect width="120" height="120" fill="#fff"/>
-      <circle cx="52" cy="84" r="7" fill="#000"/>
-      <circle cx="67" cy="72" r="4.5" fill="#000"/>
-      <circle cx="60" cy="45" r="3" fill="#000"/>
+    <mask id="cutouts">
+      <rect x="-27" width="234" height="234" fill="#fff"/>
+      <g fill="#000" stroke="#000" stroke-linecap="round" stroke-linejoin="round">
+        <!-- big leaf -->
+        <path stroke-width="1" d="M66 196C60 150 95 108 143 99C145 140 115 185 66 196Z"/>
+        <!-- small leaf -->
+        <path stroke-width="1" d="M59 182C40 178 28 160 29 132C48 138 60 155 59 182Z"/>
+        <!-- stem -->
+        <path fill="none" stroke-width="7" d="M57 213Q60 199 69 187"/>
+        <!-- bubble -->
+        <circle cx="119" cy="79" r="7.5"/>
+      </g>
+      <!-- leaf vein: put a thin line of flask colour back through the big leaf -->
+      <path d="M70 190Q88 152 116 127" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round"/>
     </mask>
   </defs>
-  <g fill="#3F4D34">
-    <!-- Lip, neck and bulb as one outline, with soft fillets where the neck meets the bulb -->
-    <path mask="url(#bubbles)" d="M48.5 15H71.5A6.5 6.5 0 0 1 71.5 28H69V49Q69 53 73 54.3A27 27 0 1 1 47 54.3Q51 53 51 49V28H48.5A6.5 6.5 0 0 1 48.5 15Z"/>
-    <circle cx="93" cy="50" r="8"/>
+  <g fill="#3F4D34" mask="url(#cutouts)">
+    <rect x="42" y="0" width="98" height="15" rx="6"/>
+    <rect x="57" y="10" width="67" height="70"/>
+    <circle cx="90" cy="144" r="90"/>
   </g>
 </svg>

@@ -5,6 +5,11 @@ import { PRODUCT_TYPES, prepareImage } from '../lib';
 
 const STEPS = ['Reading…', 'Checking…', 'Almost done…'];
 
+// iPhone/iPad browsers other than Safari (Brave, Chrome, Firefox) can't open a live
+// camera feed for websites, but all of them can open the iOS camera from a file input.
+const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
+  || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
 export default function Scan({ profile, onResult, initialMode = 'photo' }) {
   const [mode, setMode] = useState(initialMode);
   const [cameraOpen, setCameraOpen] = useState(false);
@@ -100,7 +105,9 @@ export default function Scan({ profile, onResult, initialMode = 'photo' }) {
             <span className="drop__title">Snap the label</span>
             <span className="drop__hint">Whole list, good light.</span>
             <div className="drop__actions">
-              <button className="btn btn--primary" onClick={() => setCameraOpen(true)}><Camera size={18} /> Take photo</button>
+              <button className="btn btn--primary" onClick={() => (IS_IOS ? captureRef.current?.click() : setCameraOpen(true))}>
+                <Camera size={18} /> Take photo
+              </button>
               <button className="btn btn--ghost" onClick={() => fileRef.current?.click()}><ImageUp size={18} /> Gallery</button>
             </div>
           </div>

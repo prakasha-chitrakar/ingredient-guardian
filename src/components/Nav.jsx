@@ -1,9 +1,9 @@
-import { House, ScanLine, ShieldCheck, UserRound } from 'lucide-react';
+import { House, ScanLine, UserRound } from 'lucide-react';
 
 export function Brand() {
   return (
     <header className="brand">
-      <span className="brand__mark"><ShieldCheck size={19} strokeWidth={2.4} /></span>
+      <img className="brand__mark" src="/logo.svg" alt="" width="32" height="32" />
       Ingredient Guardian
     </header>
   );

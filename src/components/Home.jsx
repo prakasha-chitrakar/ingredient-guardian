@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { ArrowRight, Camera } from 'lucide-react';
 import { Brand } from './Nav';
 import { Decoder, DiscoveryCard, DiscoverySheet } from './Discovery';
-import { CREATORS } from './About';
+import { CREDIT_LINE } from './About';
 import discoveries from '../content/discoveries.json';
 import decoder from '../content/decoder.json';
 import { isFlagged, rankDiscoveries, scanText, scoreTone, timeAgo } from '../lib';
@@ -141,7 +141,7 @@ export default function Home({ history, profile, onScan, onOpen, onSeeAll, onCom
       </section>
 
       <button className="credit credit--link" onClick={onAbout}>
-        Made by {CREATORS.join(' & ')}
+        {CREDIT_LINE}
       </button>
 
       {sheetOpen && pick && (

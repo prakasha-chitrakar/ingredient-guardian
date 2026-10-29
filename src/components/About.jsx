@@ -2,9 +2,10 @@ import { ArrowLeft } from 'lucide-react';
 import { Brand } from './Nav';
 
 export const CREATORS = ['Prakash Chitrakar', 'Ojaswi Sharma'];
+export const CREDIT_LINE = 'Made by Prakash and Ojaswi';
 
 export function Credit() {
-  return <p className="credit">Made by {CREATORS.join(' & ')}</p>;
+  return <p className="credit">{CREDIT_LINE}</p>;
 }
 
 export default function About({ onBack }) {

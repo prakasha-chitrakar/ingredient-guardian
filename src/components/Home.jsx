@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ArrowRight, Camera } from 'lucide-react';
+import { ArrowRight, Camera, GitCompareArrows, History, ImageUp, Keyboard, ScanBarcode, UserRound } from 'lucide-react';
 import { Brand } from './Nav';
 import { Decoder, DiscoveryCard, DiscoverySheet } from './Discovery';
 import { CREDIT_LINE } from './About';
@@ -63,19 +63,31 @@ export default function Home({ history, profile, onScan, onOpen, onSeeAll, onCom
 
   return (
     <div className="screen screen--home">
-      <Brand />
-
-      <section className="hero">
-        <h1 className="display-sm"><span className="tone-green">{headline[0]}</span>{headline[1]}</h1>
-        <p className="lede">
-          {stage === 'new'
-            ? 'Scan a packet. We’ll tell you what it isn’t telling you.'
-            : `Last checked: ${last.productName || 'a product'}, ${timeAgo(last.scannedAt)}.`}
-        </p>
-        <button className="btn btn--primary btn--block btn--big" onClick={() => onScan('photo')}>
-          <Camera size={20} /> Scan a product
+      <header className="home-top">
+        <Brand />
+        <button className="glass home-top__who" onClick={onProfile} aria-label="Edit who you’re checking for">
+          <UserRound size={16} /> {profile.type}
         </button>
-        <button className="link hero__alt" onClick={() => onScan('text')}>Or type the ingredients</button>
+      </header>
+
+      <section className="home-hero">
+        <img className="home-hero__img" src="/img/hero-wide.webp" alt="" />
+        <div className="glass home-hero__card">
+          <h1 className="display-sm"><span className="tone-orange">{headline[0]}</span>{headline[1]}</h1>
+          <p className="home-hero__lede">
+            {stage === 'new'
+              ? 'Scan a packet. We’ll tell you what it isn’t telling you.'
+              : `Last checked: ${last.productName || 'a product'}, ${timeAgo(last.scannedAt)}.`}
+          </p>
+          <button className="btn btn--primary btn--block btn--big" onClick={() => onScan('photo')}>
+            <Camera size={20} /> Scan a product
+          </button>
+          <div className="modes" role="group" aria-label="Other ways to check">
+            <button onClick={() => onScan('photo')}><ImageUp size={18} />Photo</button>
+            <button onClick={() => onScan('barcode')}><ScanBarcode size={18} />Barcode</button>
+            <button onClick={() => onScan('text')}><Keyboard size={18} />Type</button>
+          </div>
+        </div>
       </section>
 
       {pick && (
@@ -128,11 +140,19 @@ export default function Home({ history, profile, onScan, onOpen, onSeeAll, onCom
         </section>
       )}
 
-      {history.length >= 2 && (
-        <button className="nudge" onClick={onCompare}>
-          <span><b>Compare two products.</b> See the differences side by side.</span>
-          <ArrowRight size={18} />
-        </button>
+      {history.length > 0 && (
+        <div className="tiles">
+          <button className="tile tile--pink" onClick={onSeeAll}>
+            <History size={22} />
+            <b>Your checks</b>
+            <span>{history.length} saved · search</span>
+          </button>
+          <button className="tile tile--blue" onClick={onCompare} disabled={history.length < 2}>
+            <GitCompareArrows size={22} />
+            <b>Compare</b>
+            <span>{history.length < 2 ? 'Needs 2 checks' : 'Side by side'}</span>
+          </button>
+        </div>
       )}
 
       <section>

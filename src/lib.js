@@ -104,32 +104,28 @@ export function scanText(result) {
   return [result.productName, ...(result.ingredients || []).map(i => i.name)].filter(Boolean).join(' ').toLowerCase();
 }
 
-const DAY = Math.floor(Date.now() / 86_400_000);
-
-// Today's fact. Prefers facts linked to recent scans, then to the user's health
-// conditions; otherwise rotates daily. `offset` lets the user page to the next fact.
-export function pickDiscovery(items, history, profile, offset = 0) {
-  if (!items.length) return null;
-
-  const linked = [];
-  for (const scan of history.slice(0, 5)) {
-    const text = scanText(scan);
-    for (const item of items) {
-      if (!linked.some(l => l.item.id === item.id) && item.matchTerms.some(t => text.includes(t))) linked.push({ item, scan });
-    }
-  }
-
+// Orders facts for this visit, based on the last 5 scans: a fact whose terms appear in
+// a scan scores 3, each scan in a matching category scores 2, a matching health
+// condition scores 1. A weighted shuffle keeps the best matches likely to come first
+// without the same fact sitting on top forever. Returns [{ item, scan, reason }].
+export function rankDiscoveries(items, history, profile) {
+  const recent = history.slice(0, 5);
   const wanted = [
     profile.medical?.includes('Diabetes') && 'sugar',
     profile.medical?.includes('High Blood Pressure') && 'sodium',
   ].filter(Boolean);
-  const forProfile = items.filter(i => i.tags.some(t => wanted.includes(t)) && !linked.some(l => l.item.id === i.id)).map(item => ({ item }));
-  const rest = items.filter(i => !linked.some(l => l.item.id === i.id) && !forProfile.some(p => p.item.id === i.id)).map(item => ({ item }));
 
-  // Personal picks first, the rest in daily rotation.
-  const rotated = rest.map((_, i) => rest[(i + DAY) % rest.length]);
-  const ordered = [...linked, ...forProfile, ...rotated];
-  return ordered[(offset % ordered.length + ordered.length) % ordered.length];
+  return items
+    .map(item => {
+      const scan = recent.find(r => item.matchTerms.some(t => scanText(r).includes(t)));
+      const typeHits = recent.filter(r => item.productTypes?.includes(r.productType)).length;
+      const score = (scan ? 3 : 0) + typeHits * 2 + (item.tags.some(t => wanted.includes(t)) ? 1 : 0);
+      const reason = scan ? 'scan' : typeHits ? 'category' : null;
+      const typeName = typeHits ? recent.find(r => item.productTypes.includes(r.productType)).productType : null;
+      // Weighted random key (Efraimidis–Spirakis): higher score, more likely first.
+      return { item, scan, reason, typeName, key: Math.random() ** (1 / (score + 1)) };
+    })
+    .sort((a, b) => b.key - a.key);
 }
 
 export function timeAgo(iso) {

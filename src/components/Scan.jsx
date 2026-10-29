@@ -5,7 +5,7 @@ import Illustration from './Illustrations';
 import discoveries from '../content/discoveries.json';
 import { PRODUCT_TYPES, prepareImage } from '../lib';
 
-const STEPS = ['Reading the label…', 'Checking each ingredient…', 'Matching your profile…', 'Almost done…'];
+const STEPS = ['Reading the small print…', 'Interrogating the preservatives…', 'Asking the sugar to explain itself…', 'Checking it against you…', 'Writing the verdict…'];
 
 // Phones and tablets use their own camera app (a capture file input): it works in every
 // mobile browser, including iOS Brave/Chrome/Firefox, which can't stream the camera to

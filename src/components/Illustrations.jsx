@@ -7,6 +7,10 @@ const BG = {
   apple: '#e9f8ee',
   bread: '#f8efe4',
   carton: '#fff0e8',
+  bottle: '#f5ecfb',
+  tube: '#e8f6fc',
+  dryer: '#f5ecfb',
+  pills: '#e9f8ee',
 };
 
 function Can() {
@@ -84,7 +88,56 @@ function Carton() {
   );
 }
 
-const SHAPES = { can: Can, noodles: Noodles, chips: Chips, apple: Apple, bread: Bread, carton: Carton };
+function Bottle() {
+  return (
+    <g>
+      <rect x="96" y="26" width="28" height="22" rx="4" fill="#2f2f2f" />
+      <rect x="70" y="48" width="80" height="100" rx="22" fill="#bd4be5" />
+      <rect x="86" y="80" width="48" height="34" rx="8" fill="#fff" />
+      <text x="110" y="102" textAnchor="middle" fontSize="13" fontWeight="800" fill="#2f2f2f">?</text>
+      {[[160, 54], [172, 76], [158, 96]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r={5 - i} fill="#bd4be5" opacity={0.5} />)}
+    </g>
+  );
+}
+
+function Tube() {
+  return (
+    <g>
+      <path d="M64 120 L64 60 Q64 50 74 50 H146 Q156 50 156 60 L156 120 L140 140 H80 Z" fill="#00a9dd" />
+      <rect x="92" y="140" width="36" height="16" rx="4" fill="#2f2f2f" />
+      <rect x="82" y="70" width="56" height="30" rx="15" fill="#fff" />
+      <text x="110" y="90" textAnchor="middle" fontSize="11" fontWeight="800" fill="#2f2f2f">“hypo”</text>
+    </g>
+  );
+}
+
+function Dryer() {
+  return (
+    <g>
+      <circle cx="88" cy="78" r="38" fill="#bd4be5" />
+      <circle cx="88" cy="78" r="16" fill="#fff" />
+      <rect x="118" y="62" width="56" height="32" rx="8" fill="#bd4be5" />
+      <rect x="74" y="110" width="26" height="46" rx="8" fill="#2f2f2f" />
+      {[0, 1, 2].map(i => (
+        <path key={i} d={`M182 ${66 + i * 12} q 10 -6 20 0`} stroke="#ff6d00" strokeWidth="4" fill="none" strokeLinecap="round" />
+      ))}
+    </g>
+  );
+}
+
+function Pills() {
+  return (
+    <g>
+      <rect x="62" y="56" width="60" height="96" rx="12" fill="#fff" stroke="#2f2f2f" strokeWidth="2.5" />
+      <rect x="58" y="40" width="68" height="20" rx="6" fill="#00b33f" />
+      <rect x="74" y="84" width="36" height="30" rx="6" fill="#00b33f" opacity="0.25" />
+      <rect x="138" y="110" width="44" height="20" rx="10" fill="#ff6d00" transform="rotate(-25 160 120)" />
+      <circle cx="160" cy="80" r="11" fill="#ffc94d" />
+    </g>
+  );
+}
+
+const SHAPES = { can: Can, noodles: Noodles, chips: Chips, apple: Apple, bread: Bread, carton: Carton, bottle: Bottle, tube: Tube, dryer: Dryer, pills: Pills };
 
 export default function Illustration({ name, className }) {
   const Shape = SHAPES[name] || Apple;

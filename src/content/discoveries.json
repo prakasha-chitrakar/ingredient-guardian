@@ -11,14 +11,33 @@
     ],
     "product": "Coca-Cola Original Taste",
     "visual": "can",
-    "tags": ["sugar"],
-    "matchTerms": ["coca", "coke", "cola", "soft drink", "soda"],
+    "tags": [
+      "sugar"
+    ],
+    "matchTerms": [
+      "coca",
+      "coke",
+      "cola",
+      "soft drink",
+      "soda"
+    ],
     "note": "Figures are Coca-Cola’s published values for Original Taste. Check your own bottle’s label; recipes and sizes can vary by country.",
     "sources": [
-      { "title": "How much sugar is in Coca-Cola Original Taste?", "publisher": "Coca-Cola", "url": "https://www.coca-cola.com/ng/en/about-us/faq/how-much-sugar-is-in-cocacola-original-taste" },
-      { "title": "WHO calls on countries to reduce sugars intake among adults and children", "publisher": "World Health Organization, 2015", "url": "https://www.who.int/news/item/04-03-2015-who-calls-on-countries-to-reduce-sugars-intake-among-adults-and-children" }
+      {
+        "title": "How much sugar is in Coca-Cola Original Taste?",
+        "publisher": "Coca-Cola",
+        "url": "https://www.coca-cola.com/ng/en/about-us/faq/how-much-sugar-is-in-cocacola-original-taste"
+      },
+      {
+        "title": "WHO calls on countries to reduce sugars intake among adults and children",
+        "publisher": "World Health Organization, 2015",
+        "url": "https://www.who.int/news/item/04-03-2015-who-calls-on-countries-to-reduce-sugars-intake-among-adults-and-children"
+      }
     ],
-    "verified": "2026-10-29"
+    "verified": "2026-10-29",
+    "productTypes": [
+      "Beverage"
+    ]
   },
   {
     "id": "noodle-sodium",
@@ -32,13 +51,29 @@
     ],
     "product": "Instant noodles, like Wai Wai",
     "visual": "noodles",
-    "tags": ["sodium"],
-    "matchTerms": ["noodle", "wai wai", "ramen", "instant", "masala"],
+    "tags": [
+      "sodium"
+    ],
+    "matchTerms": [
+      "noodle",
+      "wai wai",
+      "ramen",
+      "instant",
+      "masala"
+    ],
     "note": "We don’t show a sodium figure for Wai Wai because we couldn’t verify one from an official label. Use the number printed on your packet.",
     "sources": [
-      { "title": "Sodium reduction fact sheet", "publisher": "World Health Organization", "url": "https://www.who.int/news-room/fact-sheets/detail/salt-reduction" }
+      {
+        "title": "Sodium reduction fact sheet",
+        "publisher": "World Health Organization",
+        "url": "https://www.who.int/news-room/fact-sheets/detail/salt-reduction"
+      }
     ],
-    "verified": "2026-10-29"
+    "verified": "2026-10-29",
+    "productTypes": [
+      "Food",
+      "Condiment"
+    ]
   },
   {
     "id": "chips-serving",
@@ -52,13 +87,28 @@
     ],
     "product": "Chips, like Lays",
     "visual": "chips",
-    "tags": ["portion"],
-    "matchTerms": ["chips", "lays", "crisps", "kurkure", "snack"],
+    "tags": [
+      "portion"
+    ],
+    "matchTerms": [
+      "chips",
+      "lays",
+      "crisps",
+      "kurkure",
+      "snack"
+    ],
     "note": "",
     "sources": [
-      { "title": "How to Understand and Use the Nutrition Facts Label", "publisher": "U.S. Food & Drug Administration", "url": "https://www.fda.gov/food/nutrition-facts-label/how-understand-and-use-nutrition-facts-label" }
+      {
+        "title": "How to Understand and Use the Nutrition Facts Label",
+        "publisher": "U.S. Food & Drug Administration",
+        "url": "https://www.fda.gov/food/nutrition-facts-label/how-understand-and-use-nutrition-facts-label"
+      }
     ],
-    "verified": "2026-10-29"
+    "verified": "2026-10-29",
+    "productTypes": [
+      "Food"
+    ]
   },
   {
     "id": "apple-juice-fibre",
@@ -71,15 +121,37 @@
     ],
     "product": "Apples and apple juice",
     "visual": "apple",
-    "tags": ["sugar", "fibre"],
-    "matchTerms": ["apple", "juice"],
+    "tags": [
+      "sugar",
+      "fibre"
+    ],
+    "matchTerms": [
+      "apple",
+      "juice"
+    ],
     "note": "",
     "sources": [
-      { "title": "Apples, raw, with skin (FDC 171688)", "publisher": "USDA FoodData Central", "url": "https://fdc.nal.usda.gov/food-details/171688/nutrients" },
-      { "title": "Apple juice, canned or bottled, unsweetened (FDC 167771)", "publisher": "USDA FoodData Central", "url": "https://fdc.nal.usda.gov/food-details/167771/nutrients" },
-      { "title": "WHO calls on countries to reduce sugars intake among adults and children", "publisher": "World Health Organization, 2015", "url": "https://www.who.int/news/item/04-03-2015-who-calls-on-countries-to-reduce-sugars-intake-among-adults-and-children" }
+      {
+        "title": "Apples, raw, with skin (FDC 171688)",
+        "publisher": "USDA FoodData Central",
+        "url": "https://fdc.nal.usda.gov/food-details/171688/nutrients"
+      },
+      {
+        "title": "Apple juice, canned or bottled, unsweetened (FDC 167771)",
+        "publisher": "USDA FoodData Central",
+        "url": "https://fdc.nal.usda.gov/food-details/167771/nutrients"
+      },
+      {
+        "title": "WHO calls on countries to reduce sugars intake among adults and children",
+        "publisher": "World Health Organization, 2015",
+        "url": "https://www.who.int/news/item/04-03-2015-who-calls-on-countries-to-reduce-sugars-intake-among-adults-and-children"
+      }
     ],
-    "verified": "2026-10-29"
+    "verified": "2026-10-29",
+    "productTypes": [
+      "Food",
+      "Beverage"
+    ]
   },
   {
     "id": "bread-whole-grain",
@@ -93,14 +165,33 @@
     ],
     "product": "Packaged bread",
     "visual": "bread",
-    "tags": ["fibre"],
-    "matchTerms": ["bread", "bun", "toast", "wheat flour", "maida"],
+    "tags": [
+      "fibre"
+    ],
+    "matchTerms": [
+      "bread",
+      "bun",
+      "toast",
+      "wheat flour",
+      "maida"
+    ],
     "note": "",
     "sources": [
-      { "title": "Whole Grains", "publisher": "Harvard T.H. Chan School of Public Health, The Nutrition Source", "url": "https://nutritionsource.hsph.harvard.edu/what-should-you-eat/whole-grains/" },
-      { "title": "Are whole grains that important?", "publisher": "Harvard Health Publishing", "url": "https://www.health.harvard.edu/diet-and-nutrition/are-whole-grains-that-important" }
+      {
+        "title": "Whole Grains",
+        "publisher": "Harvard T.H. Chan School of Public Health, The Nutrition Source",
+        "url": "https://nutritionsource.hsph.harvard.edu/what-should-you-eat/whole-grains/"
+      },
+      {
+        "title": "Are whole grains that important?",
+        "publisher": "Harvard Health Publishing",
+        "url": "https://www.health.harvard.edu/diet-and-nutrition/are-whole-grains-that-important"
+      }
     ],
-    "verified": "2026-10-29"
+    "verified": "2026-10-29",
+    "productTypes": [
+      "Food"
+    ]
   },
   {
     "id": "fruit-drink-sugar",
@@ -114,11 +205,170 @@
     ],
     "product": "Fruit drinks and nectars",
     "visual": "carton",
-    "tags": ["sugar"],
-    "matchTerms": ["frooti", "real", "maaza", "fruit drink", "nectar", "concentrate", "juice"],
+    "tags": [
+      "sugar"
+    ],
+    "matchTerms": [
+      "frooti",
+      "real",
+      "maaza",
+      "fruit drink",
+      "nectar",
+      "concentrate",
+      "juice"
+    ],
     "note": "",
     "sources": [
-      { "title": "WHO calls on countries to reduce sugars intake among adults and children", "publisher": "World Health Organization, 2015", "url": "https://www.who.int/news/item/04-03-2015-who-calls-on-countries-to-reduce-sugars-intake-among-adults-and-children" }
+      {
+        "title": "WHO calls on countries to reduce sugars intake among adults and children",
+        "publisher": "World Health Organization, 2015",
+        "url": "https://www.who.int/news/item/04-03-2015-who-calls-on-countries-to-reduce-sugars-intake-among-adults-and-children"
+      }
+    ],
+    "verified": "2026-10-29",
+    "productTypes": [
+      "Beverage"
+    ]
+  },
+  {
+    "id": "fragrance-secret",
+    "category": "Label Secrets",
+    "headline": "“Fragrance” can be a whole recipe in one word.",
+    "explanation": "In the US, makers can list scent ingredients simply as “Fragrance”, because the mix counts as a trade secret. If you react to scents, that one word is worth noticing.",
+    "howTo": [
+      "Look for “fragrance”, “parfum” or “perfume” in the list.",
+      "Prefer “fragrance-free” if scents bother your skin.",
+      "Patch-test new products on a small area first."
+    ],
+    "product": "Shampoos, lotions and creams",
+    "visual": "bottle",
+    "tags": [
+      "fragrance"
+    ],
+    "productTypes": [
+      "Cosmetic/Skincare",
+      "Hair Care",
+      "Makeup",
+      "Baby Product"
+    ],
+    "matchTerms": [
+      "fragrance",
+      "parfum",
+      "perfume"
+    ],
+    "note": "This describes US labelling rules. Rules in Nepal and other countries can differ.",
+    "sources": [
+      {
+        "title": "Fragrances in Cosmetics",
+        "publisher": "U.S. Food & Drug Administration",
+        "url": "https://www.fda.gov/cosmetics/cosmetic-ingredients/fragrances-cosmetics"
+      }
+    ],
+    "verified": "2026-10-29"
+  },
+  {
+    "id": "hypoallergenic",
+    "category": "Myth vs Fact",
+    "headline": "“Hypoallergenic” means whatever the brand wants.",
+    "explanation": "The FDA says there’s no federal standard or definition for “hypoallergenic”, and companies don’t have to prove the claim. It’s a marketing word, not a test result.",
+    "howTo": [
+      "Ignore the badge, read the ingredient list.",
+      "Check for anything you already know you react to."
+    ],
+    "product": "Skincare, makeup and baby products",
+    "visual": "tube",
+    "tags": [
+      "claims"
+    ],
+    "productTypes": [
+      "Cosmetic/Skincare",
+      "Makeup",
+      "Baby Product",
+      "Hair Care"
+    ],
+    "matchTerms": [
+      "hypoallergenic",
+      "sensitive"
+    ],
+    "note": "This describes US rules. Rules in Nepal and other countries can differ.",
+    "sources": [
+      {
+        "title": "Hypoallergenic Cosmetics",
+        "publisher": "U.S. Food & Drug Administration",
+        "url": "https://www.fda.gov/cosmetics/cosmetics-labeling-claims/hypoallergenic-cosmetics"
+      }
+    ],
+    "verified": "2026-10-29"
+  },
+  {
+    "id": "hair-smoothing-formaldehyde",
+    "category": "Ingredient Science",
+    "headline": "Some hair smoothing treatments release formaldehyde when heated.",
+    "explanation": "The FDA warns that some smoothing and straightening products release formaldehyde gas when the hair is heated. On the label it can hide as “formalin” or “methylene glycol”.",
+    "howTo": [
+      "Look for formaldehyde, formalin or methylene glycol.",
+      "Ask your salon what’s in the treatment.",
+      "Good airflow matters if it’s used."
+    ],
+    "product": "Hair smoothing and keratin treatments",
+    "visual": "dryer",
+    "tags": [
+      "formaldehyde"
+    ],
+    "productTypes": [
+      "Hair Care"
+    ],
+    "matchTerms": [
+      "formaldehyde",
+      "formalin",
+      "methylene glycol",
+      "keratin",
+      "smoothing",
+      "straighten"
+    ],
+    "note": "",
+    "sources": [
+      {
+        "title": "Hair Smoothing Products That Release Formaldehyde When Heated",
+        "publisher": "U.S. Food & Drug Administration",
+        "url": "https://www.fda.gov/cosmetics/cosmetic-products/hair-smoothing-products-release-formaldehyde-when-heated"
+      }
+    ],
+    "verified": "2026-10-29"
+  },
+  {
+    "id": "supplements-approval",
+    "category": "Label Secrets",
+    "headline": "Supplements don’t need approval before they hit the shelf.",
+    "explanation": "By law, the US FDA does not approve dietary supplements or their labels before they’re sold. Makers are responsible for safety; the FDA mostly steps in afterwards.",
+    "howTo": [
+      "Treat big health claims with suspicion.",
+      "Tell your doctor or pharmacist what you take.",
+      "Check the dose against the label’s serving."
+    ],
+    "product": "Vitamins and supplements",
+    "visual": "pills",
+    "tags": [
+      "claims"
+    ],
+    "productTypes": [
+      "Vitamin/Supplement",
+      "Medicine"
+    ],
+    "matchTerms": [
+      "vitamin",
+      "supplement",
+      "capsule",
+      "multivitamin",
+      "protein powder"
+    ],
+    "note": "This describes US rules. Rules in Nepal and other countries can differ.",
+    "sources": [
+      {
+        "title": "Questions and Answers on Dietary Supplements",
+        "publisher": "U.S. Food & Drug Administration",
+        "url": "https://www.fda.gov/food/information-consumers-using-dietary-supplements/questions-and-answers-dietary-supplements"
+      }
     ],
     "verified": "2026-10-29"
   }

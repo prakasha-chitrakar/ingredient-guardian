@@ -5,20 +5,22 @@ import { Decoder, DiscoveryCard, DiscoverySheet } from './Discovery';
 import { CREATORS } from './About';
 import discoveries from '../content/discoveries.json';
 import decoder from '../content/decoder.json';
-import { isFlagged, pickDiscovery, scanText, scoreTone, timeAgo } from '../lib';
+import { isFlagged, rankDiscoveries, scanText, scoreTone, timeAgo } from '../lib';
 
 // Two-tone headlines: [accent, rest].
 const HEADLINES = {
   new: [
     ['You know the brand.', ' Do you know what’s inside?'],
+    ['Read the label', ' before it reads you.'],
+    ['Your snacks', ' have secrets. Let’s hear them.'],
     ['Anything', ' in your cart today?'],
-    ['Before your next bite,', ' learn something new.'],
   ],
   returning: [
     ['Did you check', ' the ingredients in your last purchase?'],
-    ['What have you', ' been eating lately?'],
-    ['Anything new', ' in your shopping basket?'],
-    ['Today’s food fact', ' might surprise you.'],
+    ['Back again.', ' The labels missed you.'],
+    ['Your cart', ' called. It has questions.'],
+    ['What have you', ' been eating lately? Be honest.'],
+    ['Today’s fact', ' might ruin a snack. Sorry.'],
   ],
 };
 
@@ -48,7 +50,8 @@ export default function Home({ history, profile, onScan, onOpen, onSeeAll, onCom
   const [offset, setOffset] = useState(0);
   const [sheetOpen, setSheetOpen] = useState(false);
 
-  const pick = useMemo(() => pickDiscovery(discoveries, history, profile, offset), [history, profile, offset]);
+  const ranked = useMemo(() => rankDiscoveries(discoveries, history, profile), [history, profile]);
+  const pick = ranked.length ? ranked[offset % ranked.length] : null;
   const scannedText = useMemo(() => history.slice(0, 10).map(scanText).join(' '), [history]);
   const decoderItems = useMemo(
     () => [...decoder].sort((a, b) => Number(b.matchTerms.some(t => scannedText.includes(t))) - Number(a.matchTerms.some(t => scannedText.includes(t)))),
@@ -66,7 +69,7 @@ export default function Home({ history, profile, onScan, onOpen, onSeeAll, onCom
         <h1 className="display-sm"><span className="tone-green">{headline[0]}</span>{headline[1]}</h1>
         <p className="lede">
           {stage === 'new'
-            ? 'Scan a packet or its ingredient list. We’ll explain what’s inside.'
+            ? 'Scan a packet. We’ll tell you what it isn’t telling you.'
             : `Last checked: ${last.productName || 'a product'}, ${timeAgo(last.scannedAt)}.`}
         </p>
         <button className="btn btn--primary btn--block btn--big" onClick={() => onScan('photo')}>
@@ -77,9 +80,9 @@ export default function Home({ history, profile, onScan, onOpen, onSeeAll, onCom
 
       {pick && (
         <DiscoveryCard
-          item={pick.item}
-          linkedScan={pick.scan}
+          pick={pick}
           onOpen={() => setSheetOpen(true)}
+          onNext={() => setOffset(o => o + 1)}
         />
       )}
 

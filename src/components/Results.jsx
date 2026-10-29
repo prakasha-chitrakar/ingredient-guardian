@@ -156,7 +156,7 @@ export default function Results({ result, onScanAgain, onBack }) {
       ) : list.length === 0 ? (
         <div className="all-clear">
           <CircleCheck size={22} />
-          {tab === 'flagged' ? 'Nothing flagged for you.' : 'No ingredients found. Try a clearer photo.'}
+          {tab === 'flagged' ? 'Nothing flagged for you. Enjoy, responsibly.' : 'No ingredients found. Try a clearer photo.'}
         </div>
       ) : (
         <ul className="ings">{list.map((ing, i) => <IngredientRow key={`${ing.name}-${i}`} ingredient={ing} />)}</ul>

@@ -52,12 +52,12 @@ export default function History({ history, onOpen, onDelete, onRestore, onClear,
       {history.length === 0 ? (
         <div className="empty">
           <p className="empty__title">No checks yet</p>
-          <p>Scan a product and it’ll be saved here.</p>
+          <p>Suspiciously innocent. Scan something.</p>
         </div>
       ) : shown.length === 0 ? (
         <div className="empty">
           <p className="empty__title">No matches</p>
-          <p>Try another product or ingredient.</p>
+          <p>Nothing here by that name. Lucky you.</p>
         </div>
       ) : (
         <ul className="list">

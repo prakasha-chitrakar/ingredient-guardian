@@ -1,24 +1,38 @@
 import { useEffect, useRef } from 'react';
-import { ArrowRight, X } from 'lucide-react';
+import { ArrowRight, RefreshCw, X } from 'lucide-react';
 import Illustration from './Illustrations';
 
 function formatDate(iso) {
   return new Date(iso).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-// Today's fact on Home. `linkedScan` is set when the fact relates to something the user scanned.
-export function DiscoveryCard({ item, linkedScan, onOpen }) {
+const TEASERS = ['Did you know?', 'Plot twist', 'Brace yourself', 'Small print, big news'];
+
+function eyebrowFor({ reason, scan, typeName, item }) {
+  if (reason === 'scan') return `About your ${scan.productName || 'last scan'}`;
+  if (reason === 'category') return `For your ${typeName.toLowerCase()} habit`;
+  return TEASERS[item.id.length % TEASERS.length];
+}
+
+// A fact on Home. `pick` comes from rankDiscoveries and says why it was chosen.
+export function DiscoveryCard({ pick, onOpen, onNext }) {
+  const { item } = pick;
   return (
-    <article className="discovery">
+    <article className="discovery" key={item.id}>
       <Illustration name={item.visual} className="discovery__art" />
       <div className="discovery__body">
         <p className="eyebrow">
-          {linkedScan ? `About your ${linkedScan.productName || 'last scan'}` : 'Did you know?'}
+          {eyebrowFor(pick)}
           <span className="discovery__cat">{item.category}</span>
         </p>
         <h2 className="discovery__headline">{item.headline}</h2>
         <p className="discovery__text">{item.explanation}</p>
-        <button className="link link--arrow" onClick={onOpen}>Discover more <ArrowRight size={16} /></button>
+        <div className="discovery__actions">
+          <button className="link link--arrow" onClick={onOpen}>Discover more <ArrowRight size={16} /></button>
+          <button className="discovery__next" onClick={onNext} aria-label="Show another fact">
+            <RefreshCw size={16} /> Another fact
+          </button>
+        </div>
       </div>
     </article>
   );

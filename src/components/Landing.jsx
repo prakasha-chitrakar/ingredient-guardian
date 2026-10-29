@@ -18,7 +18,7 @@ export default function Landing({ onStart }) {
       <Brand />
 
       <h1 className="display"><span className="tone-green">Eat safer.</span> Check the label first.</h1>
-      <p className="lede">Snap a label. See what’s safe for you.</p>
+      <p className="lede">Snap a label. Find out what it’s hiding.</p>
 
       <FactsPanel result={EXAMPLE} example />
 
